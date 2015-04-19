@@ -1,0 +1,8 @@
+{
+    "require": {
+        "eden/block": "dev-master",
+        "eden/mysql": "dev-master",
+        "eden/system": "dev-master",
+        "eden/registry": "dev-master"
+    }
+}
