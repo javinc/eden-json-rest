@@ -1,15 +1,15 @@
 # RESTful JSON API built using eden framework
 
-# Openovate's Framework
+## Openovate's Framework
 =========
 
-# Pre Requisites
+## Pre Requisites
 
 1. PHP 5.3+
 2. Apache 2
 3. Composer
 
-# Install
+## Install
 
 1. Checkout with git via `git clone https://github.com/Openovate/Framework.git`
 2. Point your VirtualHost to load files from `[YOUR_OPENOVATE_FRAMEWORK_DIR]/repo/Front/public`
