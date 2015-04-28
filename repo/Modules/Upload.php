@@ -4,13 +4,7 @@ namespace Modules;
 
 use Exception;
 
-/**
- * General available methods for file upload
- *
- * @package    Eden
- * @category   utility
- */
-class Upload extends \Eden\Core\Base
+class Upload
 {
     /* Constants
     -------------------------------*/

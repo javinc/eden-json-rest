@@ -4,7 +4,7 @@ namespace Resources;
 
 use Modules\Service;
 
-class File extends \Eden\Core\Base
+class File
 {
     /* Constants
     --------------------------------------------*/

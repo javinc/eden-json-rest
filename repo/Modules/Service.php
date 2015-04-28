@@ -4,7 +4,7 @@ namespace Modules;
 
 use Exception;
 
-class Service extends \Eden\Core\Base
+class Service
 {
     /* Constants
     --------------------------------------------*/

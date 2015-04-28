@@ -2,7 +2,7 @@
 
 namespace Modules;
 
-class Helper extends \Eden\Core\Base
+class Helper
 {
     /* Constants
     --------------------------------------------*/

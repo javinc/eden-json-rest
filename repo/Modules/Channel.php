@@ -4,7 +4,7 @@ namespace Modules;
 
 use Resources\Channel as C;
 
-class Channel extends \Eden\Core\Base
+class Channel
 {
     /* Constants
     --------------------------------------------*/
