@@ -4,7 +4,7 @@ namespace Resources;
 
 use Modules\Service;
 
-class User
+class Channel
 {
     /* Constants
     --------------------------------------------*/

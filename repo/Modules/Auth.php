@@ -4,7 +4,7 @@ namespace Modules;
 
 use Resources\User;
 
-class Auth extends \Eden\Core\Base
+class Auth
 {
     /* Constants
     --------------------------------------------*/

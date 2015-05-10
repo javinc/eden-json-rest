@@ -2,7 +2,7 @@
 
 namespace Modules;
 
-class Rest extends \Eden\Core\Base
+class Rest
 {
     /* Constants
     --------------------------------------------*/

@@ -2,3 +2,4 @@ config
 vendor
 composer.lock
 sftp-config.json
+upload

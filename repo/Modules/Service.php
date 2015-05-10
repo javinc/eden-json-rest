@@ -4,7 +4,7 @@ namespace Modules;
 
 use Exception;
 
-class Service extends \Eden\Core\Base
+class Service
 {
     /* Constants
     --------------------------------------------*/
@@ -125,6 +125,15 @@ class Service extends \Eden\Core\Base
         // filters
         if($property = self::isPropertyExists($options, 'filters')) {
             foreach ($property as $key => $value) {
+                // if array means manual
+                // manual adding of filter
+                if(is_array($value)) {
+                    call_user_func_array(array(
+                        $search, 'addFilter'), $value);
+                    
+                    continue;
+                }
+
                 $filterMethod = 'filterBy' . ucfirst(strtolower($key));
                 $search->$filterMethod($value);
             }
