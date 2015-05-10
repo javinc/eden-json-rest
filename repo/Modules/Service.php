@@ -42,7 +42,8 @@ class Service extends \Eden\Core\Base
         $params = end($args);
 
         // normalize name
-        self::$resource = strtolower($name);
+        // camel-cased name will be underscore separated on db name
+        self::$resource = strtolower(preg_replace('/([a-zA-Z])(?=[A-Z])/', '$1_', $name));
 
         // check args is empty, then create
         // a new instance of class 
