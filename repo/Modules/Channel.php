@@ -51,7 +51,7 @@ class Channel
 
         // extract data on data field
         // decode to data to json
-        foreach ($result as $key => $value) {
+        foreach($result as $key => $value) {
             $result[$key]['data'] = json_decode($value['data']);
             $result[$key]['index'] = $value['id'];
             unset($result[$key]['id']);
@@ -67,7 +67,7 @@ class Channel
     private static function getUser()
     {   
         // get user
-        if($user = Auth::check()) {
+        if($user = Auth::getUser()) {
             return $user['id'];
         }
 

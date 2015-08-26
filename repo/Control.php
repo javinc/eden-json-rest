@@ -148,7 +148,7 @@ class Control extends Eden\Core\Controller
 	public function language() 
 	{
 		if(is_null($this->defaultLanguage)) {
-			$settings = $this->config($this->application.'/settings');
+			$settings = $this->config('/settings');
 			
 			$config = $this->path('config');
 			$path = $config.'/i18n/'.$settings['i18n'].'.php';
@@ -236,7 +236,7 @@ class Control extends Eden\Core\Controller
 	 */
 	public function setDatabases() 
 	{
-		$databases = $this->config($this->application.'/databases');
+		$databases = $this->config('/databases');
 		
 		foreach($databases as $key => $info) {	
 			//connect to the data as described in the config
@@ -288,7 +288,7 @@ class Control extends Eden\Core\Controller
 			->test(2, 'bool', 'null');
 		
 		//get settings from config
-		$settings = $this->config($this->application.'/settings');
+		$settings = $this->config('/settings');
 		
 		//if debug mode is on
 		if($settings['eden_debug']) {
@@ -387,7 +387,7 @@ class Control extends Eden\Core\Controller
 		
 		//paths that are dynamic and should not be committed
 		->set('path', 'package', $root.'/package')
-		->set('path', 'config', $root.'/config')
+		->set('path', 'config', $root.'/config/'.$this->application)
 		->set('path', 'upload', $root.'/upload')
 		
 		//repo folders
@@ -398,7 +398,7 @@ class Control extends Eden\Core\Controller
 		
 		
 		//get settings from config
-		$settings = $this->config($this->application.'/settings');
+		$settings = $this->config('/settings');
 		
 		//web paths
 		$this->registry()
@@ -498,7 +498,7 @@ class Control extends Eden\Core\Controller
 	 */
 	public function setTimezone($zone = 'GMT')
 	{
-		$settings = $this->config($this->application.'/settings');
+		$settings = $this->config('/settings');
 
 		date_default_timezone_set($settings['server_timezone']);
 
@@ -547,7 +547,7 @@ class Control extends Eden\Core\Controller
 	 */
 	public function saveTranslation() 
 	{
-		$settings = $this->config($this->application.'/settings');
+		$settings = $this->config('/settings');
 		$config = $this->path('config');
 		$path = $config.'/i18n/'.$settings['i18n'].'.php';
 		

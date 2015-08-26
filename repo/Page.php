@@ -8,6 +8,8 @@
  */
 
 use Modules\Helper;
+use Resources\Permission;
+use Modules\Auth;
 
 /**
  * The base class for any class that defines a view.
@@ -25,11 +27,31 @@ class Page extends Eden\Block\Base
 	protected $head = array();
 	protected $body = array();
 	protected $foot = array();
+
+	protected $smsApi = '';
 	
 	protected $id = NULL;
 	protected $title = NULL;
 	
 	protected $messages = array();
+
+    public function __construct() {
+        if(!isset($this->auth) || $this->auth === true) {
+            Auth::setUser(Auth::check());
+        }
+
+        // User access control settings
+        $settings = control()->config(control()->registry()->get('application').'/settings');
+        if(Auth::getUser() && isset($settings['uac']) && $settings['uac']) {
+            if(property_exists($this, 'permissions')) {
+                $this::checkPermission(
+                    Auth::getUser(),
+                    Helper::getRequestMethod(),
+                    $this::$permissions
+                );
+            }
+        }
+    }
 	
 	/**
 	 * returns variables used for templating
@@ -74,22 +96,6 @@ class Page extends Eden\Block\Base
 		die(json_encode($this->getVariables()));
 	}
 	
-	/**
-	 * Adds flash messaging
-	 *
-	 * @param string
-	 * @param string
-	 * @return Front\Page
-	 */
-	protected function addMessage($message, $type = 'info') 
-	{
-		$_SESSION['messages'][] = array(
-		'type' 		=> $type,
-		'message' 	=> $message);
-		
-		return $this;
-	}
-	
 	protected function getHelpers() 
 	{
 		$urlRoot 	= control()->path('url');
@@ -109,4 +115,19 @@ class Page extends Eden\Block\Base
 				echo $language[$key];
 			});
 	}
+
+    public static function checkPermission($user, $action, $list) {
+        if(!isset($list[$action])) {
+            return false;
+        }
+
+        if(!Permission::checkPermission($user['role_id'], $list[$action])) {
+            Helper::fatal(array(
+                'code' => 403,
+                'msg' => Auth::$errors[403]));
+        }
+
+        return true;
+    }
+
 }

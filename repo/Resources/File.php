@@ -16,7 +16,7 @@ class File
     --------------------------------------------*/
     public static function __callStatic($name, $args)
     {   
-        $table = end(explode('\\', get_class($this)));
+        $table = end(explode('\\', get_class()));
         return Service::$table($name, $args);
     }
 

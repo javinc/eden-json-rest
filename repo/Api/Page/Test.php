@@ -5,7 +5,7 @@ namespace Api\Page;
 use Modules\Helper;
 use Modules\Auth;
 use Modules\Rest;
-use Resources\User;
+use Resources\Test as T;
 
 class Test extends \Page 
 {
@@ -19,33 +19,32 @@ class Test extends \Page
     --------------------------------------------*/
     public function getVariables()
     {   
-        return $this->testService();
-        return Rest::resource(new User());
+        return Rest::resource(new T(), true);
     }
 
     public function testService()
     {
-        $auth = Auth::check();
+        $auth = Auth::getUser();
 
-        // $simple = User::get(26);
+        $simple = User::get(26);
 
-        // $single = User::get(array(
-        //     'filters' => array(
-        //         'id' => 31)));
+        $single = User::get(array(
+            'filters' => array(
+                'id' => 31)));
 
-        // $multi = User::find(array( 
-            // 'filters' => array(
-            //     'type' => 'publisher'),
-            // 'fields' => ['id', 'email', 'name'],
-            // 'sorts' => array('id' => 'desc'),
-        //     'limits' => [0, 3]));
+        $multi = User::find(array( 
+            'filters' => array(
+                'type' => 'publisher'),
+            'fields' => ['id', 'email', 'name'],
+            'sorts' => array('id' => 'desc'),
+            'limits' => [0, 3]));
 
-        // $create = User::create(Helper::getJson());
-        // $update = User::update(
-        //     Helper::getJson(),
-        //     Helper::getSegment(0));
+        $create = User::create(Helper::getJson());
+        $update = User::update(
+            Helper::getJson(),
+            Helper::getSegment(0));
 
-        // $remove = User::remove(26);
+        $remove = User::remove(26);
 
         return array(
             'auth' => $auth,

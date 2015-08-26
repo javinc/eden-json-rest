@@ -13,16 +13,17 @@ class Rest
     --------------------------------------------*/
     /* Protected Properties
     --------------------------------------------*/
+    protected static $user;
     protected static $methodsAvailable = array(
-        'GET' => 'find', 
+        'GET' => 'find',
         'POST' => 'create', 
-        'PUT' => 'update', 
+        'PATCH' => 'update', 
         'DELETE' => 'remove');
 
     /* Public Methods
     --------------------------------------------*/
-    public static function resource($resource)
-    {   
+    public static function resource($resource, $auth)
+    {
         return self::call($resource, Helper::getRequestMethod());
     }
 
@@ -58,7 +59,7 @@ class Rest
         // PUBLIC type user should only control
         // their own data by using id, while
         // ADMIN type user will not
-        if($user = Auth::check()) {
+        if($user = Auth::getUser()) {
             if(isset($user[self::TYPE_FIELD]) 
             && $user[self::TYPE_FIELD] == self::ADMIN_TYPE) {
                 return self::ADMIN_TYPE;
@@ -72,29 +73,17 @@ class Rest
     {
         $method = strtolower($method);
         if(!$method) {
-            Helper::panic($method, ' method not exists');
+            Helper::panic($method, ' method not allowed');
         }
 
         // check request authentication
-        return self::$method($resource, $resourceMethod, self::auth());
+        return self::$method($resource, $resourceMethod);
     }
 
-    private static function get($resource, $resourceMethod, $type)
+    private static function get($resource, $resourceMethod)
     {   
         $options = Helper::getParam();
         
-        // check user type
-        if($type !== self::ADMIN_TYPE) {
-            // exclude user
-
-            if(Helper::indexOf('user', strtolower($resource))) {
-                return $resource::get($type);
-            }
-
-            // add filters on options
-            $options['filters']['user_id'] = $type;
-        }
-
         // check if singles
         if($id = Helper::getSegment(0)) {
             $options['filters']['id'] = $id;
@@ -106,32 +95,26 @@ class Rest
         return $resource::$resourceMethod($options);
     }
 
-    private static function post($resource, $resourceMethod, $type)
+    private static function post($resource, $resourceMethod)
     {   
-        // check user type
-        if($type !== self::ADMIN_TYPE) {
-            // exclude user
-            if(Helper::indexOf('user', strtolower($resource))) {
-                Helper::panic('not allowed');
-            }
-        }
-
         // no id
         if((bool) Helper::getSegment(0)) {
             Helper::panic('Id must not define');
         }
 
-        return $resource::$resourceMethod(Helper::getJson());
-    }
+        $payload = Helper::getJson();
 
-    private static function put($resource, $resourceMethod, $type)
-    {
-        // check user type
-        if($type !== self::ADMIN_TYPE) {
-            return $resource::$resourceMethod(
-                Helper::getJson(), $type);
+        if(property_exists($resource, 'required') && !empty($resource::$required[$resourceMethod])
+        && $field = Helper::getMissingFields($payload, $resource::$required[$resourceMethod])) {
+            return Helper::error(array(
+                'msg' => $field . ' required, empty given'));
         }
 
+        return $resource::$resourceMethod($payload);
+    }
+
+    private static function patch($resource, $resourceMethod)
+    {
         // check if singles
         if($id = Helper::getSegment(0)) {
             return $resource::$resourceMethod(
@@ -141,14 +124,8 @@ class Rest
         Helper::panic('Id not defined');
     }
 
-    private static function delete($resource, $resourceMethod, $type)
+    private static function delete($resource, $resourceMethod)
     {   
-        // check user type
-        if($type !== self::ADMIN_TYPE) {
-            // this means deactivation
-            return $resource::$resourceMethod($type);
-        }
-
         // check if singles
         if($id = Helper::getSegment(0)) {
             return $resource::$resourceMethod($id);

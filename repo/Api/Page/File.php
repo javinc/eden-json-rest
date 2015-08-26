@@ -32,9 +32,6 @@ class File extends \Page
 
         // upload & check if key is upload
         if($method == 'POST' && $key == self::UPLOAD_KEY) {
-            // authenticate
-            Auth::check();
-
             // get file input
             return self::upload();
         }

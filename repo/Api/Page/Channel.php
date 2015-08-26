@@ -30,7 +30,7 @@ class Channel extends \Page
                 'msg' => 'GET name field is required'));
 
         // pushing
-        } else if (Helper::getRequestMethod() == 'POST') {
+        } else if(Helper::getRequestMethod() == 'POST') {
             // check required
             $data = Helper::getJson();
             if(isset($param['name']) && !empty($data)) {

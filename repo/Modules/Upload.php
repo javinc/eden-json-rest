@@ -109,13 +109,13 @@ class Upload
         $mime = 'allowed_mime';
 
         // size setting
-        if (isset($config[$size])) {
+        if(isset($config[$size])) {
             $this->config[$size];
         }
 
         // allowed mime type
         $allowedMime = $config[$mime];
-        if (isset($allowedMime)) {
+        if(isset($allowedMime)) {
             self::checkEmpty($allowedMime, 'allowed mime config empty');
 
             // if not array make it one
@@ -123,7 +123,7 @@ class Upload
                 $allowedMime = array($allowedMime);
             }
 
-            foreach ($allowedMime as $value) {
+            foreach($allowedMime as $value) {
                 $this->config[$mime][] = $value;
             }
         }
@@ -142,7 +142,7 @@ class Upload
         self::checkEmpty($file, 'uploading file is empty');
 
         // validate file
-        if (!isset($file['error']) || is_array($file['error'])) {
+        if(!isset($file['error']) || is_array($file['error'])) {
             self::throwException('invalid parameters');
         }
 
@@ -195,7 +195,7 @@ class Upload
         }
 
         // move file to temp
-        if (!move_uploaded_file($file['tmp_name'], $path . $name . $separator . $extension)) {
+        if(!move_uploaded_file($file['tmp_name'], $path . $name . $separator . $extension)) {
             self::throwException('failed to move uploaded file');
         }
 

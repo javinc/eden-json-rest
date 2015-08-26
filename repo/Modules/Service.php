@@ -28,8 +28,10 @@ class Service
 
     protected static $optionsAvailable = [
         'fields',
+        'relate',
         'limits',
         'sorts',
+        'between',
         'filters'];
 
     /* Public Methods
@@ -47,9 +49,9 @@ class Service
 
         // check args is empty, then create
         // a new instance of class 
-        if($method == '_') {
+        if($method == 'i') {
             // single instatnce
-            return self::i();
+            return self::singleton();
         }
 
         // check methods avalable
@@ -66,14 +68,9 @@ class Service
     // this will return instance of service
     // with Campaign resource and statically
     // and able to call methods
-    public static function i()
+    public static function singleton()
     {
-        static $instatnce = null;
-        if ($instatnce === null) {
-            $instatnce = new Service();
-        }
-
-        return $instatnce;
+         return new Service();
     }
 
     public static function db()
@@ -83,13 +80,13 @@ class Service
 
     public static function search()
     {
-        return self::db()->search(self::$resource);
+        return self::db()->search('`'.self::$resource.'`');
     }
 
     public static function find($options = array())
     {   
         // check options avalable
-        foreach ($options as $name => $option) {
+        foreach($options as $name => $option) {
             if(!in_array($name, self::$optionsAvailable)) {
                 Helper::panic(
                     self::$resource . '::' . __FUNCTION__ . '()',
@@ -117,14 +114,26 @@ class Service
 
         // sorts
         if($property = self::isPropertyExists($options, 'sorts')) {
-            foreach ($property as $field => $type) {
+            foreach($property as $field => $type) {
                 $search->addSort($field, strtoupper($type));
+            }
+        }
+
+        // between
+        if($property = self::isPropertyExists($options, 'between')) {
+            foreach($property as $field => $dates) {
+                if(count($dates) != 2) {
+                    return false;
+                }
+
+                $field = sprintf('%s', $field);
+                $options['filters'][] = array($field . ' BETWEEN %s AND %s', current($dates), end($dates));
             }
         }
 
         // filters
         if($property = self::isPropertyExists($options, 'filters')) {
-            foreach ($property as $key => $value) {
+            foreach($property as $key => $value) {
                 // if array means manual
                 // manual adding of filter
                 if(is_array($value)) {
@@ -146,7 +155,7 @@ class Service
             $data = $search->getRows();
 
             // except soft deleted
-            foreach ($data as $key => $value) {
+            foreach($data as $key => $value) {
                 unset($data[$key][self::DELETED_FIELD]);
             }
 
@@ -202,7 +211,7 @@ class Service
 
         try {
             $id = self::db()
-                ->insertRow(self::$resource, $fields)
+                ->insertRow('`'.self::$resource.'`', $fields)
                 ->getLastInsertedId();
 
             return self::get($id);
@@ -212,7 +221,7 @@ class Service
     }
     
     public static function update($fields, $filters)
-    {   
+    {
         // check empty fields || filters
         if(empty($fields) || empty($filters)) {
             Helper::panic(
@@ -223,17 +232,20 @@ class Service
             return;
         }
 
+        // need to pass filters param when associative
+        // because it will use find method
+        $data = self::get(is_array($filters) 
+            ? array('filters' => $filters) : $filters);
+        
         // check if exists
-        $data = self::get($filters);
-
         if(empty($data)) {
             return;
         }
 
         // parse filters
         if(is_array($filters)) {
-            foreach ($filters as $key => $filter) {
-                $filters[] = array($key . '=%s', $filter);
+            foreach($filters as $key => $filter) {
+                $filters[] = array($key . '=%s', (int) $filter);
                 unset($filters[$key]);
             }
         } else {
@@ -251,7 +263,7 @@ class Service
 
         try {
             self::db()->updateRows(
-                self::$resource, 
+                '`'.self::$resource.'`',
                 $fields,
                 $filters);
             

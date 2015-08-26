@@ -10,26 +10,40 @@ class Auth
     --------------------------------------------*/
     const AUTH_USER = 'PHP_AUTH_USER';
     const AUTH_PW = 'PHP_AUTH_PW';
-    const FB_FIELD = 'fb';
+    const AUTH_FIELD = 'username';
 
     /* Public Properties
     --------------------------------------------*/
     /* Protected Properties
     --------------------------------------------*/
-    private static $errors = array(
+    public static $errors = array(
         100 => 'no credentials found',
         101 => 'invalid credentials',
-        200 => 'user not found');
+        200 => 'user not found',
+        403 => 'forbidden action'
+    );
+
+    /* Private Properties
+    --------------------------------------------*/
+    private static $user = null;
 
     /* Public Methods
     --------------------------------------------*/
+    public static function setUser($user) {
+        self::$user = $user;
+    }
+
+    public static function getUser() {
+        return self::$user;
+    }
+
     public static function check()
     {
         $server = Helper::getServer();
 
         // check required
         if(!isset($server[self::AUTH_USER]) || !isset($server[self::AUTH_PW])) {
-            self::erroCode(100);
+            self::errorCode(100);
         }
 
         $key = $server[self::AUTH_USER];
@@ -37,17 +51,17 @@ class Auth
 
         // validate and get id
         if(!self::validate($key, $pass)) {
-            self::erroCode(101);
+            self::errorCode(101);
         }
 
         // check if user exists
         $user = User::get(array(
             'filters' => array(
-                self::FB_FIELD => $key)));
+                self::AUTH_FIELD => $key)));
 
         // if deleted or not exists
         if(!$user) {
-            self::erroCode(200);
+            self::errorCode(200);
         }
 
         return $user;
@@ -57,7 +71,7 @@ class Auth
     --------------------------------------------*/
     /* Private Methods
     --------------------------------------------*/
-    private static function erroCode($code)
+    private static function errorCode($code)
     {   
         if(array_key_exists($code, self::$errors)) {
             Helper::fatal(array(
