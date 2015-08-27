@@ -53,6 +53,68 @@ CREATE TABLE IF NOT EXISTS `file` (
 
 -- --------------------------------------------------------
 
+--
+-- Table structure for table `permission`
+--
+
+CREATE TABLE IF NOT EXISTS `permission` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `name` varchar(255) NOT NULL COMMENT 'permission name',
+  `created_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00' COMMENT 'created date',
+  `updated_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00' COMMENT 'last updated date',
+  `deleted_at` timestamp NULL DEFAULT NULL COMMENT 'deleted date',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=41 ;
+
+--
+-- Dumping data for table `permission`
+--
+
+INSERT INTO `permission` (`id`, `name`, `created_at`, `updated_at`, `deleted_at`) VALUES
+(1, 'user_view', '0000-00-00 00:00:00', '0000-00-00 00:00:00', NULL),
+(2, 'user_create', '0000-00-00 00:00:00', '0000-00-00 00:00:00', NULL),
+(3, 'user_update', '0000-00-00 00:00:00', '0000-00-00 00:00:00', NULL),
+(4, 'user_remove', '0000-00-00 00:00:00', '0000-00-00 00:00:00', NULL);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `role`
+--
+
+CREATE TABLE IF NOT EXISTS `role` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `name` varchar(255) NOT NULL COMMENT 'name of the role',
+  `created_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00' COMMENT 'created date',
+  `updated_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00' COMMENT 'last updated date',
+  `deleted_at` timestamp NULL DEFAULT NULL COMMENT 'deleted date',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=4 ;
+
+--
+-- Dumping data for table `role`
+--
+
+INSERT INTO `role` (`id`, `name`, `created_at`, `updated_at`, `deleted_at`) VALUES
+(1, 'Administrator', '0000-00-00 00:00:00', '0000-00-00 00:00:00', NULL),
+(2, 'Client', '0000-00-00 00:00:00', '0000-00-00 00:00:00', NULL);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `role_permission`
+--
+
+CREATE TABLE IF NOT EXISTS `role_permission` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `role_id` int(11) NOT NULL COMMENT 'foreign key of role table',
+  `permission_id` int(11) NOT NULL COMMENT 'foreign key of permission table',
+  `created_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00' COMMENT 'created date',
+  `updated_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00' COMMENT 'last updated date',
+  `deleted_at` timestamp NULL DEFAULT NULL COMMENT 'deleted date',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=92 ;
+
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
