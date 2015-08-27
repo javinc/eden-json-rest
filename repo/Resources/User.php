@@ -3,8 +3,7 @@
 namespace Resources;
 
 use Resources\Role;
-use Modules\Auth;
-use Modules\Service;
+use Modules\Resource;
 use Modules\Helper;
 
 class User
@@ -31,7 +30,7 @@ class User
     public static function __callStatic($name, $args)
     {   
         $table = end(explode('\\', get_class()));
-        return Service::$table($name, $args);
+        return Resource::$table($name, $args);
     }
 
     public static function create($data)

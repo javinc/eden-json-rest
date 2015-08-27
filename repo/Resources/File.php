@@ -2,7 +2,7 @@
 
 namespace Resources;
 
-use Modules\Service;
+use Modules\Resource;
 
 class File
 {
@@ -17,7 +17,7 @@ class File
     public static function __callStatic($name, $args)
     {   
         $table = end(explode('\\', get_class()));
-        return Service::$table($name, $args);
+        return Resource::$table($name, $args);
     }
 
     /* Protected Methods

@@ -2,8 +2,7 @@
 
 namespace Resources;
 
-use Modules\Auth;
-use Modules\Service;
+use Modules\Resource;
 use Modules\Helper;
 
 class Role
@@ -35,7 +34,7 @@ class Role
         }
 
         $table = end(explode('\\', get_class()));
-        return Service::$table($name, $args);
+        return Resource::$table($name, $args);
     }
     /* Protected Methods
     --------------------------------------------*/

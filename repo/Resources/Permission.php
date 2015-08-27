@@ -2,8 +2,7 @@
 
 namespace Resources;
 
-use Modules\Auth;
-use Modules\Service;
+use Modules\Resource;
 use Modules\Helper;
 
 class Permission
@@ -26,19 +25,19 @@ class Permission
     public static function __callStatic($name, $args)
     {
         $table = end(explode('\\', get_class()));
-        return Service::$table($name, $args);
+        return Resource::$table($name, $args);
     }
 
     public static function checkPermission($roleId, $permission) {
         if(is_string($permission)) {
-            $permission = Service::db()->search('permission')
+            $permission = Resource::db()->search('permission')
                 ->filterByName($permission)
                 ->getRow();
 
             $permission = $permission['id'];
         }
 
-        return !!Service::db()->search('`role_permission`')
+        return !!Resource::db()->search('`role_permission`')
             ->setColumns('id')
             ->filterByRoleId($roleId)
             ->filterByPermissionId($permission)
