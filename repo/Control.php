@@ -76,26 +76,6 @@ class Control extends Eden\Core\Controller
 	}
 	
 	/**
-	 * Returns the given application block
-	 *
-	 * @return Eden\Block\Factory
-	 */
-	public function block($name) 
-	{
-		$args 	= func_get_args();
-		$name 	= array_shift($args);
-		$class 	= ucwords($this->application).'\\Block\\'.ucwords($name);
-
-		if(class_exists($class)) {
-			return $this('core')
-			->route()
-			->callArray($class, $args);
-		}
-
-		return null;
-	}
-	
-	/**
 	 * Returns or saves the config 
 	 * data given the key
 	 *
@@ -141,31 +121,6 @@ class Control extends Eden\Core\Controller
 	}
 	
 	/**
-	 * Returns the current Language
-	 *
-	 * @return Eden\Language\Base
-	 */
-	public function language() 
-	{
-		if(is_null($this->defaultLanguage)) {
-			$settings = $this->config('/settings');
-			
-			$config = $this->path('config');
-			$path = $config.'/i18n/'.$settings['i18n'].'.php';
-			
-			$translations = array();
-			
-			if(file_exists($path)) {
-				$translations = $this->config('i18n/'.$settings['i18n']);
-			}
-			
-			$this->defaultLanguage = $this('language', $translations);
-		}
-		
-		return $this->defaultLanguage;
-	}
-	
-	/**
 	 * Returns the absolute path 
 	 * given the key
 	 *
@@ -188,18 +143,6 @@ class Control extends Eden\Core\Controller
 	{
 		echo $this;
 		return $this;	
-	}
-	
-	/**
-	 * Browser Redirect
-	 *
-	 * @param path
-	 * @return void
-	 */
-	public function redirect($path) 
-	{
-		header('Location: '.$path);
-		exit;
 	}
 	
 	/**
@@ -525,57 +468,5 @@ class Control extends Eden\Core\Controller
 		}
 		
 		return $this;
-	}
-	
-	/**
-	 * Returns the template loaded with specified data
-	 *
-	 * @param array
-	 * @return Eden\Template\Factory
-	 */
-	public function template($file, array $data = array()) 
-	{
-		$this('core')->argument()->test(1, 'string');
-		
-		return $this('template')->set($data)->parsePhp($file);
-	}
-	
-	/**
-	 * Save translation
-	 *
-	 * @return Control
-	 */
-	public function saveTranslation() 
-	{
-		$settings = $this->config('/settings');
-		$config = $this->path('config');
-		$path = $config.'/i18n/'.$settings['i18n'].'.php';
-		
-		$this->language()->save($path);
-		
-		return $this;
-	}
-	
-	/**
-	 * Translate string
-	 *
-	 * @param string
-	 * @return string
-	 */
-	public function translate($string) 
-	{
-		$this('core')->argument()->test(1, 'string');
-		
-		return $this->language()->get($string);
-	}
-	
-	/**
-	 * Generates an all pupose uid
-	 *
-	 * @return string
-	 */
-	public function uid() 
-	{
-		return 'control'.time().'-'.self::$uid++;
 	}
 }

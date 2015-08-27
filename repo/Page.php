@@ -21,15 +21,8 @@ use Modules\Auth;
  */
 class Page extends Eden\Block\Base 
 {
-	const TEMPLATE_EXTENSION = 'php';
-	
-	protected $meta	= array();
-	protected $head = array();
 	protected $body = array();
-	protected $foot = array();
 
-	protected $smsApi = '';
-	
 	protected $id = NULL;
 	protected $title = NULL;
 	
@@ -61,26 +54,6 @@ class Page extends Eden\Block\Base
 	public function getVariables() 
 	{
 		return $this->body;
-	}
-	
-	/**
-	 * returns location of template file
-	 *
-	 * @return string
-	 */
-	public function getTemplate() 
-	{
-		if(!$this->template) {
-			$start = strrpos(get_class($this), '\\');
-			
-			$this->template = control('type', get_class($this))
-				->str_replace('\\', DIRECTORY_SEPARATOR)
-				->substr($start)
-				->strtolower().'.'
-				.static::TEMPLATE_EXTENSION;
-		}
-		
-		return $this->template;
 	}
 	
 	/**
