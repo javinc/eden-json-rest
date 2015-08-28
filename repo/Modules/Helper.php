@@ -150,9 +150,9 @@ class Helper
     public static function error($name, $msg, $die = false, $panic = false)
     {
         $error = array('error' => array(
-            'panic' => $panic,
             'name' => $name,
-            'msg' => $msg));
+            'msg' => $msg,
+            'panic' => $panic));
 
         if($die) {
             die(json_encode($error));

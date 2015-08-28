@@ -95,9 +95,7 @@ class Page extends Eden\Block\Base
         }
 
         if(!Permission::checkPermission($user['role_id'], $list[$action])) {
-            Helper::fatal(array(
-                'code' => 403,
-                'msg' => Auth::$errors[403]));
+            Auth::errorCode('ACTION_FORBIDDEN');
         }
 
         return true;

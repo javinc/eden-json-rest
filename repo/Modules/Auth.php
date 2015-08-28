@@ -17,10 +17,10 @@ class Auth
     /* Protected Properties
     --------------------------------------------*/
     public static $errors = array(
-        100 => 'no credentials found',
-        101 => 'invalid credentials',
-        200 => 'user not found',
-        403 => 'forbidden action'
+        'AUTH_NO_CREDENTIALS' => 'no credentials found',
+        'AUTH_INVALID_CREDENTIALS' => 'invalid credentials',
+        'AUTH_NO_USER' => 'user not found',
+        'ACTION_FORBIDDEN' => 'forbidden action'
     );
 
     /* Private Properties
@@ -43,7 +43,7 @@ class Auth
 
         // check required
         if(!isset($server[self::AUTH_USER]) || !isset($server[self::AUTH_PW])) {
-            self::errorCode(100);
+            self::errorCode('AUTH_NO_CREDENTIALS');
         }
 
         $key = $server[self::AUTH_USER];
@@ -51,7 +51,7 @@ class Auth
 
         // validate and get id
         if(!self::validate($key, $pass)) {
-            self::errorCode(101);
+            self::errorCode('AUTH_INVALID_CREDENTIALS');
         }
 
         // check if user exists
@@ -61,7 +61,7 @@ class Auth
 
         // if deleted or not exists
         if(!$user) {
-            self::errorCode(200);
+            self::errorCode('AUTH_NO_USER');
         }
 
         return $user;
