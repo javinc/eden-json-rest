@@ -32,16 +32,18 @@ class Rest
         // check empty resource || method
         if(empty($resource) || empty($method)) {
             Helper::panic(
-                Helper::$resource . '::' . __FUNCTION__ . '()', 
-                'resource & method are required,',
-                'empty given');
+                'REST_RESOURCE_REQUIRED',
+                Helper::$resource . '::' . __FUNCTION__ . 
+                '() resource & method are required, empty given');
 
             return;
         }
 
         // check available methods
         if(!array_key_exists($method, self::$methodsAvailable)) {
-            Helper::panic($method, 'method not available');
+            Helper::panic(
+                'REST_METHOD_NOT_AVAILABLE',
+                $method . ' method not available');
         }
 
         // rest call
@@ -73,7 +75,9 @@ class Rest
     {
         $method = strtolower($method);
         if(!$method) {
-            Helper::panic($method, ' method not allowed');
+            Helper::panic(
+                'REST_METHOD_NOT_ALLOWED',
+                $method . ' method not allowed');
         }
 
         // check request authentication
@@ -99,15 +103,18 @@ class Rest
     {   
         // no id
         if((bool) Helper::getSegment(0)) {
-            Helper::panic('Id must not define');
+            Helper::panic(
+                'REST_ID_MUST_NOT_DEFINED',
+                'Id must not define');
         }
 
         $payload = Helper::getJson();
 
         if(property_exists($resource, 'required') && !empty($resource::$required[$resourceMethod])
         && $field = Helper::getMissingFields($payload, $resource::$required[$resourceMethod])) {
-            return Helper::error(array(
-                'msg' => $field . ' required, empty given'));
+            return Helper::error(
+                'REST_FIELDS_REQUIRED',
+                $field . ' required, empty given');
         }
 
         return $resource::$resourceMethod($payload);
@@ -121,7 +128,9 @@ class Rest
                 Helper::getJson(), $id);
         }
 
-        Helper::panic('Id not defined');
+        Helper::panic(
+            'REST_ID_NOT_DEFINED',
+            'Id not defined');
     }
 
     private static function delete($resource, $resourceMethod)
@@ -131,6 +140,8 @@ class Rest
             return $resource::$resourceMethod($id);
         }
 
-        Helper::panic('Id not defined');
+        Helper::panic(
+            'REST_ID_NOT_DEFINED',
+            'Id not defined');
     }
 }
