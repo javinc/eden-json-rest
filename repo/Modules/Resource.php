@@ -57,8 +57,8 @@ class Resource
         // check methods avalable
         if(!in_array($method, self::$methodsAvailable)) {
             Helper::panic(
-                $name . '::' . $method . '()', 
-                'not available');
+                'RESOURCE_METHOD_NOT_AVAIALBLE',
+                $name . '::' . $method . '()' . ' not available');
         }
 
         return call_user_func_array(array(self, $method), $params);
@@ -89,10 +89,9 @@ class Resource
         foreach($options as $name => $option) {
             if(!in_array($name, self::$optionsAvailable)) {
                 Helper::panic(
-                    self::$resource . '::' . __FUNCTION__ . '()',
-                    'option',
-                    $name,
-                    'not available');
+                    'RESOURCE_OPTION_NOT_AVAIALBLE',
+                    self::$resource . '::' . __FUNCTION__ . '()'.
+                    ' option ' . $name . ' not available');
             }
         }
 
@@ -161,7 +160,9 @@ class Resource
 
             return $data; 
         } catch (Exception $e) {
-            Helper::panic($e->getMessage());
+            Helper::panic(
+                'RESOURCE_FIND_EXCEPTION',
+                $e->getMessage());
         }
     }
 
@@ -170,9 +171,9 @@ class Resource
         // check empty options
         if(empty($options)) {
             Helper::panic(
-                self::$resource . '::' . __FUNCTION__ . '()', 
-                'options required,',
-                'empty given');
+                'RESOURCE_OPTION_REQUIRED',
+                self::$resource . '::' . __FUNCTION__ . 
+                '() options required, empty given');
 
             return;
         }
@@ -198,9 +199,9 @@ class Resource
         // check empty fields
         if(empty($fields)) {
             Helper::panic(
-                self::$resource . '::' . __FUNCTION__ . '()', 
-                'fields required,',
-                'empty given');
+                'RESOURCE_FIELDS_REQUIRED',
+                self::$resource . '::' . __FUNCTION__ . 
+                '() fields required, empty given');
 
             return;
         }
@@ -216,7 +217,9 @@ class Resource
 
             return self::get($id);
         } catch (Exception $e) {
-            Helper::panic($e->getMessage());
+            Helper::panic(
+                'RESOURCE_CREATE_EXCEPTION',
+                $e->getMessage());
         }
     }
     
@@ -225,9 +228,9 @@ class Resource
         // check empty fields || filters
         if(empty($fields) || empty($filters)) {
             Helper::panic(
-                self::$resource . '::' . __FUNCTION__ . '()', 
-                'fields & filters are required,',
-                'empty given');
+                'RESOURCE_FIELDS_AND_FILTERS_REQUIRED',
+                self::$resource . '::' . __FUNCTION__ . 
+                '() fields & filters are required, empty given');
 
             return;
         }
@@ -278,8 +281,9 @@ class Resource
         // check empty filters
         if(empty($filters)) {
             Helper::panic(
-                self::$resource . '::' . __FUNCTION__ . '()', 
-                'filters required');
+                'RESOURCE_FILTERS_REQUIRED',
+                self::$resource . '::' . __FUNCTION__ . 
+                '() filters required');
 
             return;
         }
