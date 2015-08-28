@@ -34,6 +34,7 @@ class Role
         }
 
         $table = end(explode('\\', get_class()));
+        
         return Resource::$table($name, $args);
     }
     /* Protected Methods
