@@ -74,9 +74,8 @@ class Auth
     private static function errorCode($code)
     {   
         if(array_key_exists($code, self::$errors)) {
-            Helper::fatal(array(
-                'code' => $code,
-                'msg' => self::$errors[$code]));
+            // kill it!
+            Helper::error($code, self::$errors[$code], true);
         }
     }
 

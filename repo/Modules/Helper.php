@@ -133,17 +133,12 @@ class Helper
      * 
      * @param string error message 
      */
-    public static function panic($msg)
+    public static function panic($name, $msg)
     {   
-        $msg = func_get_args();
-        if(count($msg) == 0) {
-            return;
-        }
-
         self::getHeaders();
 
-        die(json_encode(self::error(array(
-            'panic' => implode(' ', $msg)))));
+        // it will die and flagged as panic
+        self::error($name, $msg, true, true);
     }
 
     /*
@@ -152,9 +147,18 @@ class Helper
      * @param string error message 
      * @return array formatted error 
      */
-    public static function error($msg)
+    public static function error($name, $msg, $die = false, $panic = false)
     {
-        return array('error' => $msg);
+        $error = array('error' => array(
+            'panic' => $panic,
+            'name' => $name,
+            'msg' => $msg));
+
+        if($die) {
+            die(json_encode($error));
+        }
+
+        return $error;
     }
 
     /*
