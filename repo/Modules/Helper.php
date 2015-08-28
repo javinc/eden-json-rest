@@ -2,7 +2,12 @@
 
 namespace Modules;
 
-use Resources\NetworkPrefix;
+/**
+ * General available methods
+ *
+ * @category   utility
+ * @author     javincX
+ */
 
 class Helper
 {
@@ -14,6 +19,12 @@ class Helper
     --------------------------------------------*/
     /* Public Methods
     --------------------------------------------*/
+    /*
+     * get POST JSON data
+     *
+     * @param int index
+     * @return array 
+     */
     public static function getJson($field = null)
     {
         if($input = (array) json_decode(file_get_contents('php://input'))) {
@@ -30,6 +41,12 @@ class Helper
         return $data;
     }
 
+    /*
+     * get GET paramters data
+     *
+     * @param int index
+     * @return array 
+     */
     public static function getParam($field = null)
     {
         return self::getData(
@@ -37,6 +54,12 @@ class Helper
             $field);
     }
 
+    /*
+     * get request URI 
+     *
+     * @param int index
+     * @return array 
+     */
     public static function getSegment($index = null)
     {
         return self::getData(
@@ -44,16 +67,34 @@ class Helper
             $index);
     }
 
+    /*
+     * get request method wrapper 
+     *
+     * @return string
+     */
     public static function getRequestMethod()
     {
         return self::getServer()['REQUEST_METHOD'];
     }
 
+    /*
+     * get PHP SERVER data 
+     *
+     * @return array
+     */
     public static function getServer()
     {
         return control()->registry()['server'];
     }
 
+    /*
+     * string search index
+     * will return false if not found
+     *  
+     * @param string needle
+     * @param string stack
+     * @return int index
+     */
     public static function indexOf($needle, $string)
     {
         $index = strrpos($string, $needle);
@@ -64,7 +105,10 @@ class Helper
         return $index;
     }
 
-    // needed headers
+    /*
+     * exec needed headers
+     *  
+     */
     public static function getHeaders()
     {
         header('Content-Type: application/json');
@@ -73,14 +117,23 @@ class Helper
         header('Access-Control-Allow-Methods: GET, POST, PATCH, PUT, DELETE, OPTIONS');
     }
 
-    // throw exception
+    /*
+     * wrapper for throwing exception
+     * 
+     * @param string error message 
+     */
     public static function throwError($msg = null)
     {
         throw new Exception($msg);
     }
 
-    // stops the program, unexpected errors
-    public static function panic()
+    /*
+     * panics are program errors
+     * stops the program for fatal errors
+     * 
+     * @param string error message 
+     */
+    public static function panic($msg)
     {   
         $msg = func_get_args();
         if(count($msg) == 0) {
@@ -93,25 +146,23 @@ class Helper
             'panic' => implode(' ', $msg)))));
     }
 
-    // displays error
-    public static function fatal($msg)
-    {   
-        if(count($msg) == 0) {
-            return;
-        }
-
-        self::getHeaders();
-
-        die(json_encode(self::error($msg)));
-    }
-
-    // gives formatted error
+    /*
+     * gives formatted error
+     * 
+     * @param string error message 
+     * @return array formatted error 
+     */
     public static function error($msg)
     {
         return array('error' => $msg);
     }
 
-    // dump
+    /*
+     * prints data
+     * 
+     * @param scalar 
+     * @param bool 
+     */
     public static function debug($data = null, $die = false)
     {
         control()->inspect($data);
@@ -121,7 +172,14 @@ class Helper
         }
     }
 
-    // check fields if exists
+    /*
+     * check fields if exists
+     * search array will return 0 if not found
+     * 
+     * @param array stack
+     * @param string needle
+     * @param string needle
+     */
     public static function getMissingFields($data, $required)
     {   
         foreach($required as $require) {
@@ -136,62 +194,11 @@ class Helper
         return;
     }
 
-    // standardized sms number
-    public static function normalizeNumber(&$number)
-    {
-        $prefixes = array(
-            '+639',
-            '639',
-            '09');
-
-        // check missing
-        $prefix = false;
-        foreach($prefixes as $key) {
-            if(Helper::indexOf($key, $number) === 0) {
-                $prefix = $key;
-
-                break;
-            }
-        }
-
-        if($prefix === false) {
-            return $prefix;
-        }
-
-        $number = $prefixes[0] . substr($number, strlen($prefix));
-
-        // check length
-        if(strlen($number) != 13) {
-            return false;
-        }
-
-        return true;
-    }
-
-    // detect network 
-    public static function detectNetwork($number)
-    {
-        // normalize number when number is seem to be normal
-        // I'll consider special numbers
-        if(strlen($number) > 10 && !self::normalizeNumber($number)) {
-            return false;
-        }
-
-        // get network prefix
-        $prefix = substr($number, 3, 3);
-        
-        // find network
-        $network = NetworkPrefix::get(array(
-            'filters' => array('number' => $prefix),
-            'fields' => array('network')));
-
-        return $network['network'] ? $network['network'] : 'other';
-    }
-
     /* Protected Methods
     --------------------------------------------*/
     /* Private Methods
     --------------------------------------------*/
+    // get data based on index
     private static function getData($stack, $index = null)
     {
         if($index === null) {
