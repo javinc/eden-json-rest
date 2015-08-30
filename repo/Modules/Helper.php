@@ -3,7 +3,7 @@
 namespace Modules;
 
 /**
- * General available methods
+ * Utility for Structure
  *
  * @category   utility
  * @author     javincX
