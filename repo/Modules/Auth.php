@@ -3,7 +3,6 @@
 namespace Modules;
 
 use Modules\JWT;
-use Resources\User;
 use Exception;
 
 class Auth
@@ -55,12 +54,7 @@ class Auth
 
         // check if user exists
         $user = $payload[self::USER_KEY];
-        $exists = User::get(array(
-            'fields' => array(self::ID_FIELD),
-            'filters' => array(self::ID_FIELD => $user[self::ID_FIELD])));
-
-        // if deleted or not exists
-        if(!$exists) {
+        if(empty($user)) {
             self::errorCode('AUTH_NO_USER');
         }
 
