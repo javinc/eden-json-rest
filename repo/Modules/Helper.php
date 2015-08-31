@@ -8,7 +8,6 @@ namespace Modules;
  * @category   utility
  * @author     javincX
  */
-
 class Helper
 {
     /* Constants
@@ -85,6 +84,18 @@ class Helper
     public static function getServer()
     {
         return control()->registry()['server'];
+    }
+
+    /*
+     * get settings 
+     *
+     * @return array
+     */
+    public static function getSettings($index = null)
+    {
+        return self::getData(
+            control()->config('/settings'),
+            $index);
     }
 
     /*
