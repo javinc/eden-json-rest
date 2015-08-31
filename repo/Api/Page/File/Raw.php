@@ -29,9 +29,7 @@ class Raw extends \Page
             }
         }
 
-        return Helper::error(
-            'FILE_NOT_FOUND',
-            $key . ' not found');
+        die('file not found');
     }
 
     /* Protected Methods
