@@ -285,7 +285,7 @@ class Resource
                 self::$resource . '::' . __FUNCTION__ . 
                 '() filters required');
 
-            return;
+            return false;
         }
 
         // soft remove only

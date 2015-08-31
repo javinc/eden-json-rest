@@ -16,9 +16,7 @@ class Index extends \Page
     --------------------------------------------*/
     public function getVariables()
     {   
-        return Helper::error(array(
-            'code' => '404', 
-            'msg' => 'not found'));
+        return Helper::error('NOT_FOUND', 'page not found');
     }
 
     /* Protected Methods

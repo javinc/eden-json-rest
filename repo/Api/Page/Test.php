@@ -24,8 +24,8 @@ class Test extends \Page
     --------------------------------------------*/
     public function getVariables()
     {   
-        return $this->testJWT();
-        // return Rest::resource(new T(), true);
+        // return $this->testJWT();
+        return Rest::resource(new T(), true);
     }
 
     public function testJWT()
