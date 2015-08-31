@@ -53,7 +53,8 @@ class JWT
         J::$leeway = self::$leeway;
 
         try {
-            return (array) J::decode($token, $setting['key'], $setting['algo']);
+            $payload = J::decode($token, $setting['key'], $setting['algo']);
+            return json_decode(json_encode($payload), true);
         } catch (Exception $e) {
             // Helper::throwError($e->getMessage());
 
