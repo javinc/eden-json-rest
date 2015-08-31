@@ -5,7 +5,10 @@ namespace Api\Page;
 use Modules\Helper;
 use Modules\Auth;
 use Modules\Rest;
+use Modules\JWT ;
 use Resources\Test as T;
+
+use Exception;
 
 class Test extends \Page 
 {
@@ -13,13 +16,31 @@ class Test extends \Page
     --------------------------------------------*/
     /* Public Properties
     --------------------------------------------*/
+    public $auth = false;
+
     /* Protected Properties
     --------------------------------------------*/
     /* Public Methods
     --------------------------------------------*/
     public function getVariables()
     {   
-        return Rest::resource(new T(), true);
+        return $this->testJWT();
+        // return Rest::resource(new T(), true);
+    }
+
+    public function testJWT()
+    {
+        
+        $token = Helper::getServer('HTTP_APPLICATION_AUTHORIZATION');
+
+        // $jwt = JWT::encode(array("user" => array('id' => '1', 'username' => 'admin')));
+
+        try {   
+            JWT::setLeeway(60);
+            return $payload = JWT::decode($token);
+        } catch (Exception $e) {
+            return $e->getMessage();        
+        }
     }
 
     public function testService()

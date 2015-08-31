@@ -32,7 +32,6 @@ class Page extends Eden\Block\Base
         if(!isset($this->auth) || $this->auth === true) {
             Auth::setUser(Auth::check());
         }
-
         // User access control settings
         $settings = control()->config(control()->registry()->get('application').'/settings');
         if(Auth::getUser() && isset($settings['uac']) && $settings['uac']) {

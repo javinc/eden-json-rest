@@ -2,6 +2,8 @@
 
 namespace Modules;
 
+use Exception;
+
 /**
  * Utility for Structure
  *
@@ -73,6 +75,7 @@ class Helper
      */
     public static function getRequestMethod()
     {
+
         return self::getServer()['REQUEST_METHOD'];
     }
 
@@ -81,9 +84,11 @@ class Helper
      *
      * @return array
      */
-    public static function getServer()
+    public static function getServer($index = null)
     {
-        return control()->registry()['server'];
+        return self::getData(
+            control()->registry()['server'],
+            $index);
     }
 
     /*
@@ -91,7 +96,7 @@ class Helper
      *
      * @return array
      */
-    public static function getSettings($index = null)
+    public static function getSetting($index = null)
     {
         return self::getData(
             control()->config('/settings'),
