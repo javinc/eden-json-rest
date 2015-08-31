@@ -55,7 +55,7 @@ class JWT
         try {
             return (array) J::decode($token, $setting['key'], $setting['algo']);
         } catch (Exception $e) {
-            Helper::throwError($e->getMessage());
+            // Helper::throwError($e->getMessage());
 
             return false;
         }
