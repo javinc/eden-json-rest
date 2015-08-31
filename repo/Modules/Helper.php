@@ -92,6 +92,18 @@ class Helper
     }
 
     /*
+     * get $_FILES data 
+     *
+     * @return array
+     */
+    public static function getFile($field = null)
+    {
+        return self::getData(
+            control()->registry()['files'],
+            $field);
+    }
+
+    /*
      * get settings 
      *
      * @return array

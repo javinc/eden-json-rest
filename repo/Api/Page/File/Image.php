@@ -1,14 +1,10 @@
 <?php //-->
 
-namespace Api\Page;
+namespace Api\Page\File;
 
-use Exception;
-use Modules\Auth;
 use Modules\Helper;
-use Modules\Rest;
-use Resources\File as F;
 
-class File extends \Page 
+class Image extends \Page 
 {
     /* Constants
     --------------------------------------------*/
@@ -16,14 +12,13 @@ class File extends \Page
     --------------------------------------------*/
     /* Protected Properties
     --------------------------------------------*/
-
     /* Public Methods
     --------------------------------------------*/
     public function getVariables()
     {   
-        return Rest::resource(new F(), true);
+        return Helper::error('NOT_FOUND', 'page not found');
     }
-    
+
     /* Protected Methods
     --------------------------------------------*/
     /* Private Methods
