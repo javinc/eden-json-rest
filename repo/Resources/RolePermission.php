@@ -3,7 +3,7 @@
 namespace Resources;
 
 use Modules\Auth;
-use Modules\Service;
+use Modules\Resource;
 use Modules\Helper;
 
 class RolePermission
@@ -21,7 +21,7 @@ class RolePermission
     public static function __callStatic($name, $args)
     {
         $table = end(explode('\\', get_class()));
-        return Service::$table($name, $args);
+        return Resource::$table($name, $args);
     }
 
     public static function find($options)

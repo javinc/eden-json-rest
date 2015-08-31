@@ -3,6 +3,7 @@
 namespace Api\Page;
 
 use Modules\Helper;
+use Modules\JWT;
 use Resources\User;
 use Resources\RolePermission;
 
@@ -25,42 +26,39 @@ class Login extends \Page
     public function getVariables()
     {   
         // public access for post
-        if(Helper::getRequestMethod() == 'GET') {
-            $option = Helper::getParam();
+        if(Helper::getRequestMethod() == 'POST') {
+            $payload = Helper::getJSON();
 
             // check required
-            if($field = Helper::getMissingFields($option, array(
+            if($field = Helper::getMissingFields($payload, array(
                 self::USER_FIELD, 
                 self::PASS_FIELD))) {
-                return Helper::error(array(
-                    'msg' => $field . ' required, empty given'));
+                return Helper::error(
+                    'LOGIN_FIELDS_REQUIRED',
+                    $field . ' required, empty given');
             }
 
             // hash password
-            $option[self::PASS_FIELD] = sha1($option[self::PASS_FIELD]);
+            $payload[self::PASS_FIELD] = sha1($payload[self::PASS_FIELD]);
             
-            $user = User::get(array('filters' => $option));
+            $user = User::get(array('filters' => $payload));
             
             // invalid
             if(!$user) {
-                return Helper::error(array(
-                    'msg' => 'Invalid username or password',
-                    'errorLogin' => true));
+                return Helper::error(
+                    'LOGIN_INVALID',
+                    'Invalid username or password');
             }
 
             // disabled user no login
             if($user[self::STATUS_FIELD] == 'disabled') {
-                return Helper::error(array(
-                    'msg' => 'User is disabled',
-                    'errorLogin' => true));
+                return Helper::error(
+                    'LOGIN_DISABLED',
+                    'User is disabled');
             }
 
+            // remove fields
             unset($user[self::PASS_FIELD]);
-
-            // generate token
-            $user['token'] = base64_encode($user[self::USER_FIELD] . ':' . 
-                sha1($user[self::USER_FIELD]));
-            $user['errorLogin'] = false;
 
             // get permissions
             $permissions = RolePermission::find(array(
@@ -74,11 +72,15 @@ class Login extends \Page
                 $user['access'][] = $permission['permission']['name'];
             }
 
+            // generate JWT
+            $user['token'] = JWT::encode(array('user' => $user));
+
             return $user;
         }
         
-        return Helper::error(array(
-            'msg' => 'method not allowed'));
+        return Helper::error(
+            'METHOD_NOT_ALLOWED',
+            'method not allowed');
     }
     
     /* Protected Methods

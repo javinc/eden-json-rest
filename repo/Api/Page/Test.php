@@ -36,7 +36,7 @@ class Test extends \Page
 
         try {   
             JWT::setLeeway(60);
-            return $payload = JWT::decode($jwt);
+            return $payload = JWT::decode($token);
         } catch (Exception $e) {
             return $e->getMessage();        
         }
