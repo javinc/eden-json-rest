@@ -2,15 +2,17 @@
 
 namespace Modules;
 
+use Modules\JWT;
 use Resources\User;
+use Exception;
 
 class Auth
 {
     /* Constants
     --------------------------------------------*/
-    const AUTH_USER = 'PHP_AUTH_USER';
-    const AUTH_PW = 'PHP_AUTH_PW';
-    const AUTH_FIELD = 'username';
+    const ID_FIELD = 'id';
+    const USER_KEY = 'user';
+    const AUTH_FIELD = 'HTTP_APPLICATION_AUTHORIZATION';
 
     /* Public Properties
     --------------------------------------------*/
@@ -38,29 +40,27 @@ class Auth
     }
 
     public static function check()
-    {
-        $server = Helper::getServer();
-
+    {   
         // check required
-        if(!isset($server[self::AUTH_USER]) || !isset($server[self::AUTH_PW])) {
+        $token = Helper::getServer('HTTP_APPLICATION_AUTHORIZATION');
+        if(empty($token)) {
             self::errorCode('AUTH_NO_CREDENTIALS');
         }
 
-        $key = $server[self::AUTH_USER];
-        $pass = $server[self::AUTH_PW];
-
         // validate and get id
-        if(!self::validate($key, $pass)) {
+        $payload = self::validate($token);
+        if(empty($payload)) {
             self::errorCode('AUTH_INVALID_CREDENTIALS');
         }
 
         // check if user exists
-        $user = User::get(array(
-            'filters' => array(
-                self::AUTH_FIELD => $key)));
+        $user = $payload[self::USER_KEY];
+        $exists = User::get(array(
+            'fields' => array(self::ID_FIELD),
+            'filters' => array(self::ID_FIELD => $user[self::ID_FIELD])));
 
         // if deleted or not exists
-        if(!$user) {
+        if(!$exists) {
             self::errorCode('AUTH_NO_USER');
         }
 
@@ -79,13 +79,13 @@ class Auth
         }
     }
 
-    private static function validate($key, $pass)
+    private static function validate($token)
     {
-        // pass is just a sha1 of key
-        if(sha1($key) !== $pass) {
-            return false;
+        try {   
+            JWT::setLeeway(60);
+            return JWT::decode($token);
+        } catch (Exception $e) {
+            return false;     
         }
-
-        return true;
     }
 }

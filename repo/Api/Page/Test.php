@@ -5,7 +5,7 @@ namespace Api\Page;
 use Modules\Helper;
 use Modules\Auth;
 use Modules\Rest;
-use Modules\JWT ;
+use Modules\JWT;
 use Resources\Test as T;
 
 use Exception;
@@ -16,7 +16,7 @@ class Test extends \Page
     --------------------------------------------*/
     /* Public Properties
     --------------------------------------------*/
-    public $auth = false;
+    // public $auth = false;
 
     /* Protected Properties
     --------------------------------------------*/
@@ -30,14 +30,13 @@ class Test extends \Page
 
     public function testJWT()
     {
-        
         $token = Helper::getServer('HTTP_APPLICATION_AUTHORIZATION');
 
-        // $jwt = JWT::encode(array("user" => array('id' => '1', 'username' => 'admin')));
+        $jwt = JWT::encode(array("user" => array('id' => '1', 'username' => 'admin')));
 
         try {   
             JWT::setLeeway(60);
-            return $payload = JWT::decode($token);
+            return $payload = JWT::decode($jwt);
         } catch (Exception $e) {
             return $e->getMessage();        
         }
