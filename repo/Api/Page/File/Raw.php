@@ -36,6 +36,11 @@ class Raw extends \Page
             'filters' => array(
                 'uuid' => $uuid)));
         
+        // check empty
+        if(empty($data)) {
+            return false;
+        } 
+
         // add file path
         $data['path'] = Upload::getPath() . '/' . $uuid . '.' . $data['extension'];
 

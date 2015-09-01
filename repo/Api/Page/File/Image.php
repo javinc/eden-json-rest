@@ -19,8 +19,6 @@ class Image extends \Page
     public function getVariables()
     {   
         return self::renderImage();
-
-        return Helper::error('NOT_FOUND', 'page not found');
     }
 
     public static function renderImage()
@@ -43,6 +41,10 @@ class Image extends \Page
         
         // get image path
         $file = Raw::getData($uuid);
+        if(empty($file)) {
+            die('file not found');
+        }
+
         // load the image object
         $image = eden('image', $file['path'], strtolower($file['extension']));
         // keep original ratio
