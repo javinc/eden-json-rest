@@ -1,17 +1,17 @@
 -- phpMyAdmin SQL Dump
--- version 4.2.12deb2
+-- version 3.4.10.1deb1
 -- http://www.phpmyadmin.net
 --
 -- Host: localhost
--- Generation Time: Sep 01, 2015 at 02:52 AM
--- Server version: 5.6.25-0ubuntu0.15.04.1
--- PHP Version: 5.6.4-4ubuntu6.2
+-- Generation Time: Sep 01, 2015 at 11:28 AM
+-- Server version: 5.5.44
+-- PHP Version: 5.5.28-1+deb.sury.org~precise+1
 
-SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
+SET SQL_MODE="NO_AUTO_VALUE_ON_ZERO";
 SET time_zone = "+00:00";
 
 --
--- Database: `ejr`
+-- Database: `dev_ejr`
 --
 
 -- --------------------------------------------------------
@@ -21,7 +21,7 @@ SET time_zone = "+00:00";
 --
 
 CREATE TABLE IF NOT EXISTS `file` (
-`id` int(11) NOT NULL,
+  `id` int(11) NOT NULL AUTO_INCREMENT,
   `uuid` varchar(255) NOT NULL,
   `name` varchar(255) NOT NULL,
   `extension` varchar(255) NOT NULL,
@@ -29,8 +29,9 @@ CREATE TABLE IF NOT EXISTS `file` (
   `size` int(11) NOT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
-  `deleted_at` timestamp NULL DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+  `deleted_at` timestamp NULL DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
 
 -- --------------------------------------------------------
 
@@ -39,12 +40,13 @@ CREATE TABLE IF NOT EXISTS `file` (
 --
 
 CREATE TABLE IF NOT EXISTS `permission` (
-`id` int(11) NOT NULL,
+  `id` int(11) NOT NULL AUTO_INCREMENT,
   `name` varchar(255) NOT NULL COMMENT 'permission name',
   `created_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00' COMMENT 'created date',
   `updated_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00' COMMENT 'last updated date',
-  `deleted_at` timestamp NULL DEFAULT NULL COMMENT 'deleted date'
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=latin1;
+  `deleted_at` timestamp NULL DEFAULT NULL COMMENT 'deleted date',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=5 ;
 
 --
 -- Dumping data for table `permission`
@@ -63,12 +65,13 @@ INSERT INTO `permission` (`id`, `name`, `created_at`, `updated_at`, `deleted_at`
 --
 
 CREATE TABLE IF NOT EXISTS `role` (
-`id` int(11) NOT NULL,
+  `id` int(11) NOT NULL AUTO_INCREMENT,
   `name` varchar(255) NOT NULL COMMENT 'name of the role',
   `created_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00' COMMENT 'created date',
   `updated_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00' COMMENT 'last updated date',
-  `deleted_at` timestamp NULL DEFAULT NULL COMMENT 'deleted date'
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=latin1;
+  `deleted_at` timestamp NULL DEFAULT NULL COMMENT 'deleted date',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=3 ;
 
 --
 -- Dumping data for table `role`
@@ -85,13 +88,14 @@ INSERT INTO `role` (`id`, `name`, `created_at`, `updated_at`, `deleted_at`) VALU
 --
 
 CREATE TABLE IF NOT EXISTS `role_permission` (
-`id` int(11) NOT NULL,
+  `id` int(11) NOT NULL AUTO_INCREMENT,
   `role_id` int(11) NOT NULL COMMENT 'foreign key of role table',
   `permission_id` int(11) NOT NULL COMMENT 'foreign key of permission table',
   `created_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00' COMMENT 'created date',
   `updated_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00' COMMENT 'last updated date',
-  `deleted_at` timestamp NULL DEFAULT NULL COMMENT 'deleted date'
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=latin1;
+  `deleted_at` timestamp NULL DEFAULT NULL COMMENT 'deleted date',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=5 ;
 
 --
 -- Dumping data for table `role_permission`
@@ -110,13 +114,14 @@ INSERT INTO `role_permission` (`id`, `role_id`, `permission_id`, `created_at`, `
 --
 
 CREATE TABLE IF NOT EXISTS `test` (
-`id` int(11) NOT NULL,
+  `id` int(11) NOT NULL AUTO_INCREMENT,
   `title` varchar(255) DEFAULT NULL,
   `description` varchar(255) DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
-  `deleted_at` timestamp NULL DEFAULT NULL
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=latin1;
+  `deleted_at` timestamp NULL DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=5 ;
 
 --
 -- Dumping data for table `test`
@@ -134,15 +139,17 @@ INSERT INTO `test` (`id`, `title`, `description`, `created_at`, `updated_at`, `d
 --
 
 CREATE TABLE IF NOT EXISTS `user` (
-`id` int(11) NOT NULL,
+  `id` int(11) NOT NULL AUTO_INCREMENT,
   `username` varchar(255) DEFAULT NULL,
   `password` varchar(255) DEFAULT NULL,
   `status` enum('active','inactive','disabled','') NOT NULL,
   `role_id` int(11) NOT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
-  `deleted_at` timestamp NULL DEFAULT NULL
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;
+  `deleted_at` timestamp NULL DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `email` (`password`)
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=2 ;
 
 --
 -- Dumping data for table `user`
@@ -150,78 +157,3 @@ CREATE TABLE IF NOT EXISTS `user` (
 
 INSERT INTO `user` (`id`, `username`, `password`, `status`, `role_id`, `created_at`, `updated_at`, `deleted_at`) VALUES
 (1, 'admin', '11f6ad8ec52a2984abaafd7c3b516503785c2072', 'active', 1, NULL, NULL, NULL);
-
---
--- Indexes for dumped tables
---
-
---
--- Indexes for table `file`
---
-ALTER TABLE `file`
- ADD PRIMARY KEY (`id`);
-
---
--- Indexes for table `permission`
---
-ALTER TABLE `permission`
- ADD PRIMARY KEY (`id`);
-
---
--- Indexes for table `role`
---
-ALTER TABLE `role`
- ADD PRIMARY KEY (`id`);
-
---
--- Indexes for table `role_permission`
---
-ALTER TABLE `role_permission`
- ADD PRIMARY KEY (`id`);
-
---
--- Indexes for table `test`
---
-ALTER TABLE `test`
- ADD PRIMARY KEY (`id`);
-
---
--- Indexes for table `user`
---
-ALTER TABLE `user`
- ADD PRIMARY KEY (`id`), ADD UNIQUE KEY `email` (`password`);
-
---
--- AUTO_INCREMENT for dumped tables
---
-
---
--- AUTO_INCREMENT for table `file`
---
-ALTER TABLE `file`
-MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
---
--- AUTO_INCREMENT for table `permission`
---
-ALTER TABLE `permission`
-MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=5;
---
--- AUTO_INCREMENT for table `role`
---
-ALTER TABLE `role`
-MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=3;
---
--- AUTO_INCREMENT for table `role_permission`
---
-ALTER TABLE `role_permission`
-MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=5;
---
--- AUTO_INCREMENT for table `test`
---
-ALTER TABLE `test`
-MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=5;
---
--- AUTO_INCREMENT for table `user`
---
-ALTER TABLE `user`
-MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=2;
