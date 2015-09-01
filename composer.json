@@ -4,7 +4,7 @@
         "eden/mysql": "dev-master",
         "eden/system": "dev-master",
         "eden/registry": "dev-master",
-        "firebase/php-jwt": "^3.0",
-        "eden/image": "^1.0"
+        "eden/image": "^1.0",
+        "firebase/php-jwt": "^3.0"
     }
 }
