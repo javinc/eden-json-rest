@@ -22,43 +22,59 @@ class Raw extends \Page
         $uuid = Helper::getSegment(0);
         
         // retrieve file
-        if(Helper::getRequestMethod() == 'GET') {
-            // if key is uuid impose raw file
-            if($data = self::getRawFile($uuid)) {
-                return $data;
-            }
+        if($data = self::getFile($uuid)) {
+            return $data;
         }
 
         die('file not found');
+    }
+
+    public static function getData($uuid)
+    {
+        // search uuid if exists
+        $data = F::get(array(
+            'filters' => array(
+                'uuid' => $uuid)));
+        
+        // add file path
+        $data['path'] = Upload::getPath() . '/' . $uuid . '.' . $data['extension'];
+
+        return $data;
+    }
+
+    public static function getFile($uuid)
+    {   
+        $data = self::getData($uuid);
+        // check if empty
+        if(empty($data)) {
+            return false;
+        }
+
+        // dispose file
+        if($data) {
+            self::dispose($data['path'], $data['name'], $data['mime'], $data['size']);
+        }
+
+        return false;
+    }
+
+    public static function dispose($path, $name, $mime, $size)
+    {
+        $fp = fopen($path, 'rb');
+
+        // send the right headers
+        header('Content-Disposition: inline; filename="' . $name . '"');
+        header('Content-Type: ' . $mime);
+        header('Content-Length: ' . $size);
+
+        // dump the picture and stop the script
+        fpassthru($fp);
+
+        exit;
     }
 
     /* Protected Methods
     --------------------------------------------*/
     /* Private Methods
     --------------------------------------------*/
-    private static function getRawFile($uuid)
-    {   
-        // search uuid if exists
-        $data = F::get(array(
-            'filters' => array(
-                'uuid' => $uuid)));
-
-        // dispose file
-        if($data) {
-            $path = Upload::getPath() . '/' . $uuid . '.' . $data['extension'];
-            $fp = fopen($path, 'rb');
-
-            // send the right headers
-            header('Content-Disposition: inline; filename="' . $data['name'] . '"');
-            header('Content-Type: ' . $data['mime']);
-            header('Content-Length: ' . $data['size']);
-
-            // dump the picture and stop the script
-            fpassthru($fp);
-
-            exit;
-        }
-
-        return false;
-    }
 }
