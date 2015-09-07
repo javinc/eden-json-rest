@@ -18,3 +18,12 @@ is a RESTful JSON API built using [Openovate's Eden Framework V3](https://github
 - File Upload
 - Image Render
 - CSV Tool
+
+### structure
+	---------- Modules ------
+	|			|			|
+	Resource -> Service -> Endpoint
+	|			|			|
+	|			|			- RESTful
+	|			- business logic
+	- database obejects
