@@ -26,7 +26,6 @@ class Role
     --------------------------------------------*/
     public static function __callStatic($name, $args)
     {
-        
         // search 
         if(isset(Helper::getParam()['search']) && Helper::getRequestMethod() == 'GET') {
             // rip search
