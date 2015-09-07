@@ -10,6 +10,8 @@ class Index extends \Page
     --------------------------------------------*/
     /* Public Properties
     --------------------------------------------*/
+    public $auth = false;
+    
     /* Protected Properties
     --------------------------------------------*/
     /* Public Methods
