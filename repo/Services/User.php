@@ -2,18 +2,24 @@
 
 namespace Services;
 
-/**
- * Utility for Service & Resource related class
- *
- * @category   utility
- * @author     javincX
- */
-class Util
+use Resources\User as U;
+
+class User
 {
     /* Constants
     --------------------------------------------*/
     /* Public Properties
     --------------------------------------------*/
+    public static function __callStatic($name, $args)
+    {   
+        return call_user_method_array($name, new U(), $args);
+    }
+
+    public static function login()
+    {
+        return 'login';
+    }
+
     /* Protected Properties
     --------------------------------------------*/
     /* Private Properties

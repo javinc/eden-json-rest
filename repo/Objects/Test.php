@@ -1,14 +1,10 @@
 <?php //-->
 
-namespace Services;
+namespace Objects;
 
-/**
- * Utility for Service & Resource related class
- *
- * @category   utility
- * @author     javincX
- */
-class Util
+use Modules\Resource;
+
+class Test
 {
     /* Constants
     --------------------------------------------*/
@@ -20,6 +16,12 @@ class Util
     --------------------------------------------*/
     /* Public Methods
     --------------------------------------------*/
+    public static function __callStatic($name, $args)
+    {   
+        $table = end(explode('\\', get_class()));
+        return Resource::$table($name, $args);
+    }
+    
     /* Protected Methods
     --------------------------------------------*/
     /* Private Methods

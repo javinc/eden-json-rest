@@ -6,7 +6,9 @@ use Modules\Helper;
 use Modules\Auth;
 use Modules\Rest;
 use Modules\JWT;
-use Resources\Test as T;
+
+use Services\Test as T;
+use Services\User;
 
 use Exception;
 
@@ -24,7 +26,6 @@ class Test extends \Page
     --------------------------------------------*/
     public function getVariables()
     {   
-        // return $this->testJWT();
         return Rest::resource(new T(), true);
     }
 
