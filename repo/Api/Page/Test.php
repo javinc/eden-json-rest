@@ -32,12 +32,15 @@ class Test extends \Page
     {
         $token = Helper::getServer('HTTP_APPLICATION_AUTHORIZATION');
 
-        $jwt = JWT::encode(array("user" => array('id' => '1', 'username' => 'admin')));
+        $jwt = JWT::encode(array(
+            "user" => array(
+                'id' => '1', 
+                'username' => 'admin')));
 
         try {   
             JWT::setLeeway(60);
             return $payload = JWT::decode($token);
-        } catch (Exception $e) {
+        } catch (Exception $e) {  
             return $e->getMessage();        
         }
     }
