@@ -39,7 +39,7 @@ class Auth
     }
 
     public static function check()
-    {   
+    {
         // check required
         $token = Helper::getServer('HTTP_APPLICATION_AUTHORIZATION');
         if(empty($token)) {
@@ -66,7 +66,7 @@ class Auth
     /* Private Methods
     --------------------------------------------*/
     private static function errorCode($code)
-    {   
+    {
         if(array_key_exists($code, self::$errors)) {
             // kill it!
             Helper::error($code, self::$errors[$code], true);
@@ -75,11 +75,11 @@ class Auth
 
     private static function validate($token)
     {
-        try {   
+        try {
             JWT::setLeeway(60);
             return JWT::decode($token);
         } catch (Exception $e) {
-            return false;     
+            return false;
         }
     }
 }
