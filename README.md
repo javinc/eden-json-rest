@@ -27,4 +27,4 @@ is a RESTful JSON API built using [Openovate's Eden Framework V3](https://github
 	|			|			|
 	|			|			- RESTful
 	|			- business logic
-	- database obejects
+	- database objects
