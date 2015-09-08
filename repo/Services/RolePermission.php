@@ -1,34 +1,26 @@
 <?php //-->
 
-namespace Api\Page;
+namespace Services;
 
-use Modules\Helper;
-use Services\User;
+use Resources\RolePermission as R;
 
-class Login extends \Page 
+class RolePermission
 {
     /* Constants
     --------------------------------------------*/
     /* Public Properties
     --------------------------------------------*/
-    public $auth = false;
-
     /* Protected Properties
+    --------------------------------------------*/
+    /* Private Properties
     --------------------------------------------*/
     /* Public Methods
     --------------------------------------------*/
-    public function getVariables()
+    public static function __callStatic($name, $args)
     {   
-        // public access for post
-        if(Helper::getRequestMethod() == 'POST') {
-            return User::login(Helper::getJSON());
-        }
-        
-        return Helper::error(
-            'METHOD_NOT_ALLOWED',
-            'method not allowed');
+        return R::$name(current($args), end($args));
     }
-    
+
     /* Protected Methods
     --------------------------------------------*/
     /* Private Methods
