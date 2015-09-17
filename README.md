@@ -23,8 +23,8 @@ is a RESTful JSON API built using [Openovate's Eden Framework V3](https://github
 
 	---------- Modules ------
 	|			|			|
-	Resource -> Service -> Presentation
+	Resource -> Service -> Controller
 	|			|			|
-	|			|			- RESTful
+	|			|			- presentation
 	|			- business logic
 	- database objects
