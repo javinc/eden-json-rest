@@ -1,6 +1,6 @@
 <?php //-->
 
-namespace App;
+require_once __DIR__.'/../vendor/autoload.php';
 
 use Exception;
 use Modules\Helper;
@@ -8,8 +8,8 @@ use Modules\Upload;
 use Resources\File as F;
 
 /**
- * Service File
- * business logic of this class object
+ * defines the starting point of every site call.
+ * starts laying out how classes and methods are handled.
  *
  * @category   service
  * @author     javincX

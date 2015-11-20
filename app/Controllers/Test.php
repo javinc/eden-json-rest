@@ -1,6 +1,6 @@
 <?php //-->
 
-namespace Api\Page;
+namespace App\Controllers;
 
 use Modules\Rest;
 use Services\Test as T;

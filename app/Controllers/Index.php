@@ -1,29 +1,24 @@
 <?php //-->
 
-namespace Api\Page;
+namespace App\Controllers;
 
 use Modules\Helper;
-use Modules\Rest;
-use Services\File as F;
 
-class File extends \Page
+class Index extends \Page
 {
     /* Constants
     --------------------------------------------*/
     /* Public Properties
     --------------------------------------------*/
+    public $auth = false;
+
     /* Protected Properties
     --------------------------------------------*/
     /* Public Methods
     --------------------------------------------*/
     public function getVariables()
     {
-        // restrict the username not to be change
-        if(Helper::getRequestMethod() == 'GET') {
-            return Rest::resource(new F(), true);
-        }
-
-        return Helper::error('METHOD_NOT_ALLOWED', 'method not allowed');
+        return Helper::error('NOT_FOUND', 'page not found');
     }
 
     /* Protected Methods

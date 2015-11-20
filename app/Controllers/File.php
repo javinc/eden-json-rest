@@ -1,13 +1,12 @@
 <?php //-->
 
-namespace Api\Page;
+namespace App\Controllers;
 
 use Modules\Helper;
 use Modules\Rest;
-use Services\User as U;
-use Services\Permission;
+use Services\File as F;
 
-class User extends \Page
+class File extends \Page
 {
     /* Constants
     --------------------------------------------*/
@@ -17,25 +16,14 @@ class User extends \Page
     --------------------------------------------*/
     /* Public Methods
     --------------------------------------------*/
-    public static $permissions = array(
-        'GET' => Permission::USER_VIEW,
-        'POST' => Permission::USER_CREATE,
-        'PATCH' => Permission::USER_UPDATE,
-        'DELETE' => Permission::USER_REMOVE,
-    );
-
     public function getVariables()
     {
         // restrict the username not to be change
-        if(Helper::getRequestMethod() == 'PATCH') {
-            if(Helper::getJson('username')) {
-                return Helper::error('USERNAME_MUST_NOT_CHANGE',
-                    'Username cannot be change');
-            }
+        if(Helper::getRequestMethod() == 'GET') {
+            return Rest::resource(new F(), true);
         }
 
-        // call to api
-        return Rest::resource(new U(), true);
+        return Helper::error('METHOD_NOT_ALLOWED', 'method not allowed');
     }
 
     /* Protected Methods

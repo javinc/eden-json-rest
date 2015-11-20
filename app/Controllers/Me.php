@@ -1,6 +1,6 @@
 <?php //-->
 
-namespace Api\Page;
+namespace App\Controllers;
 
 use Modules\Helper;
 use Services\Me as M;

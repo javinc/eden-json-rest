@@ -4,7 +4,7 @@
  * (c) 2011-2012 Openovate Labs
  */
 
-require __DIR__.'/../../Control.php';
+require __DIR__.'/../app/App.php';
 
 /* Get Application
 -------------------------------*/
