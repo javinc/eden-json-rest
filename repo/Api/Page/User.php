@@ -4,10 +4,10 @@ namespace Api\Page;
 
 use Modules\Helper;
 use Modules\Rest;
-use Resources\User as U;
-use Resources\Permission;
+use Services\User as U;
+use Services\Permission;
 
-class User extends \Page 
+class User extends \Page
 {
     /* Constants
     --------------------------------------------*/
@@ -29,8 +29,8 @@ class User extends \Page
         // restrict the username not to be change
         if(Helper::getRequestMethod() == 'PATCH') {
             if(Helper::getJson('username')) {
-                return Helper::error(array(
-                    'msg' => 'Username cannot be change'));
+                return Helper::error('USERNAME_MUST_NOT_CHANGE',
+                    'Username cannot be change');
             }
         }
 

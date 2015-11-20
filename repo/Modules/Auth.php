@@ -2,9 +2,15 @@
 
 namespace Modules;
 
-use Modules\JWT;
 use Exception;
 
+/**
+ * Module Auth
+ * tool, wrapper, and helper of this class object
+ *
+ * @category   module
+ * @author     javincX
+ */
 class Auth
 {
     /* Constants
@@ -61,11 +67,7 @@ class Auth
         return $user;
     }
 
-    /* Protected Methods
-    --------------------------------------------*/
-    /* Private Methods
-    --------------------------------------------*/
-    private static function errorCode($code)
+    public static function errorCode($code)
     {
         if(array_key_exists($code, self::$errors)) {
             // kill it!
@@ -73,11 +75,15 @@ class Auth
         }
     }
 
+    /* Protected Methods
+    --------------------------------------------*/
+    /* Private Methods
+    --------------------------------------------*/
     private static function validate($token)
     {
         try {
-            JWT::setLeeway(60);
-            return JWT::decode($token);
+            Jwt::setLeeway(60);
+            return Jwt::decode($token);
         } catch (Exception $e) {
             return false;
         }

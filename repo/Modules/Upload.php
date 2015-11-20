@@ -4,6 +4,14 @@ namespace Modules;
 
 use Exception;
 
+/**
+ * Module Upload
+ * pluggable module for handling file uploads
+ * tool, wrapper, and helper of this class object
+ *
+ * @category   module
+ * @author     javincX
+ */
 class Upload
 {
     /* Constants
@@ -13,7 +21,7 @@ class Upload
     public $fileName = null;
     public $path = null;
     public $config = array(
-        'limit_size' => 1000000,
+        'limit_size' => 10000000,
         'allowed_mime' => array('text/csv'));
 
     /* Protected Properties
@@ -35,7 +43,7 @@ class Upload
      * @return this
      */
     public function setAllowedMime($mime)
-    {   
+    {
         $this->setUploadConfig(array('allowed_mime' => $mime));
 
         return $this;
@@ -48,7 +56,7 @@ class Upload
      * @return this
      */
     public function setLimitSize($size)
-    {   
+    {
         $this->setUploadConfig(array('limit_size' => $size));
 
         return $this;
@@ -92,7 +100,7 @@ class Upload
 
     /**
      * upload configuration
-     * default config 
+     * default config
      *      limit_size      1000000
      *      allowed_mime    text/csv
      *
@@ -104,7 +112,7 @@ class Upload
     public function setUploadConfig(array $config)
     {
         self::checkEmpty($config, 'upload config empty');
-        
+
         $size = 'limit_size';
         $mime = 'allowed_mime';
 
@@ -129,7 +137,7 @@ class Upload
         }
 
         return $this;
-    }    
+    }
 
     /**
      * upload file
@@ -161,11 +169,12 @@ class Upload
 
         // check file size
         if($file['size'] > $this->config['limit_size']) {
-            self::throwException('exceeded filesize limit');
+            self::throwException('exceeded filesize limit of '
+                . ($this->config['limit_size'] / 1000000) . ' mb');
         }
 
         // check file mime exists
-        if((!isset($file['type']) || $file['type'] == '') 
+        if((!isset($file['type']) || $file['type'] == '')
         && (!isset($file['mime']) || $file['mime'] == '')) {
             self::throwException('mime or type not exists');
         }
@@ -180,7 +189,7 @@ class Upload
         $separator = '.';
         $extension = explode($separator, $file['name']);
         $extension = end($extension);
-        
+
         $name = is_null($this->fileName) ? self::getUID() : $this->fileName;
         $path = self::normalizePath($this->path);
 
@@ -228,7 +237,7 @@ class Upload
     -------------------------------*/
     // generate UUID
     private static function getUID($data = null)
-    {   
+    {
         return md5(is_null($data) ? microtime() : $data);
     }
 

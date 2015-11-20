@@ -4,6 +4,14 @@ namespace Modules;
 
 use Exception;
 
+/**
+ * Module Resource
+ * gives power to an resource class object to access database
+ * tool, wrapper, and helper of this class object
+ *
+ * @category   module
+ * @author     javincX
+ */
 class Resource
 {
     /* Constants
@@ -38,7 +46,7 @@ class Resource
     --------------------------------------------*/
     // self calling instance
     public static function __callStatic($name, $args)
-    {   
+    {
         // properties
         $method = strtolower(current($args));
         $params = end($args);
@@ -48,7 +56,7 @@ class Resource
         self::$resource = strtolower(preg_replace('/([a-zA-Z])(?=[A-Z])/', '$1_', $name));
 
         // check args is empty, then create
-        // a new instance of class 
+        // a new instance of class
         if($method == 'i') {
             // single instatnce
             return self::singleton();
@@ -61,7 +69,16 @@ class Resource
                 $name . '::' . $method . '()' . ' not available');
         }
 
-        return call_user_func_array(array(self, $method), $params);
+        $result = call_user_func_array(array(self, $method), $params);
+
+        // check relationship
+        $resourceName = self::getResourcesName($name);
+        if(property_exists($resourceName, 'relations')) {
+            eval('$relations = $resourceName::$relations;');
+            return self::relator($result, $relations, current($params));
+        }
+
+        return $result;
     }
 
     // singleton
@@ -80,11 +97,11 @@ class Resource
 
     public static function search()
     {
-        return self::db()->search('`'.self::$resource.'`');
+        return self::db()->search('`' . self::$resource . '`');
     }
 
     public static function find($options = array())
-    {   
+    {
         // check options avalable
         foreach($options as $name => $option) {
             if(!in_array($name, self::$optionsAvailable)) {
@@ -132,13 +149,20 @@ class Resource
 
         // filters
         if($property = self::isPropertyExists($options, 'filters')) {
+            $exception = ['key'];
             foreach($property as $key => $value) {
+                // if exception convert to array so it will
+                // treat as a manual entry
+                if(!is_numeric($key) && in_array($key, $exception)) {
+                    $value = array('`' . $key . '` = %s', $value);
+                }
+
                 // if array means manual
                 // manual adding of filter
                 if(is_array($value)) {
                     call_user_func_array(array(
                         $search, 'addFilter'), $value);
-                    
+
                     continue;
                 }
 
@@ -158,7 +182,7 @@ class Resource
                 unset($data[$key][self::DELETED_FIELD]);
             }
 
-            return $data; 
+            return $data;
         } catch (Exception $e) {
             Helper::panic(
                 'RESOURCE_FIND_EXCEPTION',
@@ -167,12 +191,12 @@ class Resource
     }
 
     public static function get($options = array())
-    {   
+    {
         // check empty options
         if(empty($options)) {
             Helper::panic(
                 'RESOURCE_OPTION_REQUIRED',
-                self::$resource . '::' . __FUNCTION__ . 
+                self::$resource . '::' . __FUNCTION__ .
                 '() options required, empty given');
 
             return;
@@ -182,7 +206,7 @@ class Resource
         // special cases of table column naming
         // convention, In this case column id is `id`
         if(!is_array($options)) {
-            $options = array('filters' => array('id' => $options));    
+            $options = array('filters' => array('id' => $options));
         }
 
         // single row
@@ -192,15 +216,18 @@ class Resource
     }
 
     public static function create($fields)
-    {   
+    {
         // cast array
         $fields = (array) $fields;
+
+        // add escaper for sql special words
+        $fields = self::sqlEscape($fields);
 
         // check empty fields
         if(empty($fields)) {
             Helper::panic(
                 'RESOURCE_FIELDS_REQUIRED',
-                self::$resource . '::' . __FUNCTION__ . 
+                self::$resource . '::' . __FUNCTION__ .
                 '() fields required, empty given');
 
             return;
@@ -212,7 +239,7 @@ class Resource
 
         try {
             $id = self::db()
-                ->insertRow('`'.self::$resource.'`', $fields)
+                ->insertRow('`' . self::$resource . '`', $fields)
                 ->getLastInsertedId();
 
             return self::get($id);
@@ -222,14 +249,14 @@ class Resource
                 $e->getMessage());
         }
     }
-    
+
     public static function update($fields, $filters)
     {
         // check empty fields || filters
         if(empty($fields) || empty($filters)) {
             Helper::panic(
                 'RESOURCE_FIELDS_AND_FILTERS_REQUIRED',
-                self::$resource . '::' . __FUNCTION__ . 
+                self::$resource . '::' . __FUNCTION__ .
                 '() fields & filters are required, empty given');
 
             return;
@@ -237,9 +264,9 @@ class Resource
 
         // need to pass filters param when associative
         // because it will use find method
-        $data = self::get(is_array($filters) 
+        $data = self::get(is_array($filters)
             ? array('filters' => $filters) : $filters);
-        
+
         // check if exists
         if(empty($data)) {
             return;
@@ -266,23 +293,23 @@ class Resource
 
         try {
             self::db()->updateRows(
-                '`'.self::$resource.'`',
-                $fields,
+                '`' . self::$resource . '`',
+                self::sqlEscape($fields),
                 $filters);
-            
-            return $data;
+
+            return $fields;
         } catch (Exception $e) {
             Helper::panic($e->getMessage());
         }
     }
 
     public static function remove($filters)
-    {   
+    {
         // check empty filters
         if(empty($filters)) {
             Helper::panic(
                 'RESOURCE_FILTERS_REQUIRED',
-                self::$resource . '::' . __FUNCTION__ . 
+                self::$resource . '::' . __FUNCTION__ .
                 '() filters required');
 
             return false;
@@ -294,6 +321,48 @@ class Resource
             $filters)) {
             return true;
         }
+    }
+
+    public static function relator($result, $resources, $options)
+    {
+        $relateKey = 'relate';
+
+        if(empty($options[$relateKey]) && !is_array($options[$relateKey])) {
+            return $result;
+        }
+
+        // check if multi dimensional array
+        // it means its a find()
+        $isMulti = !is_array(current($result));
+        if($isMulti) {
+            $result = array($result);
+        }
+
+        foreach($result as $key => $row)  {
+            foreach($resources as $r) {
+                if(in_array($r, $options[$relateKey])) {
+                    $id = strtolower($r) . '_id';
+
+                    // check if empty
+                    if(empty($row[$id])) {
+                        return array();
+                    }
+
+                    // call function dynamically
+                    $data = call_user_func(
+                        self::getResourcesName($r) . '::get', $row[$id]);
+                    // if not found make sure its null
+                    $result[$key][$r] = empty($data) ? null : $data;
+                    unset($result[$key][$id]);
+                }
+            }
+        }
+
+        if($isMulti) {
+            $result = current($result);
+        }
+
+        return $result;
     }
 
     /* Protected Methods
@@ -312,5 +381,22 @@ class Resource
         }
 
         return false;
+    }
+
+    private static function getResourcesName($name)
+    {
+        return 'Resources\\' . Helper::toClassName($name);
+    }
+
+    private static function sqlEscape($fields, $escape = true)
+    {
+        $e = '`';
+        foreach($fields as $key => $field) {
+            $k = $escape ? $e . $key . $e : str_replace($e, '', $key);
+            $fields[$k] = $field;
+            unset($fields[$key]);
+        }
+
+        return $fields;
     }
 }

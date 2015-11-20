@@ -2,6 +2,14 @@
 
 namespace Modules;
 
+/**
+ * Module Rest
+ * capturing request method and its equivalent method
+ * tool, wrapper, and helper of this class object
+ *
+ * @category   module
+ * @author     javincX
+ */
 class Rest
 {
     /* Constants
@@ -16,8 +24,8 @@ class Rest
     protected static $user;
     protected static $methodsAvailable = array(
         'GET' => 'find',
-        'POST' => 'create', 
-        'PATCH' => 'update', 
+        'POST' => 'create',
+        'PATCH' => 'update',
         'DELETE' => 'remove');
 
     /* Public Methods
@@ -28,12 +36,12 @@ class Rest
     }
 
     public static function call($resource, $method)
-    {   
+    {
         // check empty resource || method
         if(empty($resource) || empty($method)) {
             Helper::panic(
                 'REST_RESOURCE_REQUIRED',
-                Helper::$resource . '::' . __FUNCTION__ . 
+                Helper::$resource . '::' . __FUNCTION__ .
                 '() resource & method are required, empty given');
 
             return;
@@ -55,18 +63,18 @@ class Rest
     /* Private Methods
     --------------------------------------------*/
     private static function auth()
-    {   
+    {
         // check user type
         // auth will identify type user
         // PUBLIC type user should only control
         // their own data by using id, while
         // ADMIN type user will not
         if($user = Auth::getUser()) {
-            if(isset($user[self::TYPE_FIELD]) 
+            if(isset($user[self::TYPE_FIELD])
             && $user[self::TYPE_FIELD] == self::ADMIN_TYPE) {
                 return self::ADMIN_TYPE;
             }
-            
+
             return $user['id'];
         }
     }
@@ -85,9 +93,9 @@ class Rest
     }
 
     private static function get($resource, $resourceMethod)
-    {   
+    {
         $options = Helper::getParam();
-        
+
         // check if singles
         if($id = Helper::getSegment(0)) {
             $options['filters']['id'] = $id;
@@ -100,7 +108,7 @@ class Rest
     }
 
     private static function post($resource, $resourceMethod)
-    {   
+    {
         // no id
         if((bool) Helper::getSegment(0)) {
             Helper::panic(
@@ -110,6 +118,7 @@ class Rest
 
         $payload = Helper::getJson();
 
+        // checking requirements
         if(property_exists($resource, 'required') && !empty($resource::$required[$resourceMethod])
         && $field = Helper::getMissingFields($payload, $resource::$required[$resourceMethod])) {
             return Helper::error(
@@ -134,7 +143,7 @@ class Rest
     }
 
     private static function delete($resource, $resourceMethod)
-    {   
+    {
         // check if singles
         if($id = Helper::getSegment(0)) {
             return $resource::$resourceMethod($id);

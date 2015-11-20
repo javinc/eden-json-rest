@@ -3,8 +3,14 @@
 namespace Resources;
 
 use Modules\Resource;
-use Modules\Helper;
 
+/**
+ * Resource Role
+ * database object of this class object
+ *
+ * @category   resource
+ * @author     javincX
+ */
 class Role
 {
     /* Constants
@@ -15,25 +21,11 @@ class Role
     --------------------------------------------*/
     /* Private Properties
     --------------------------------------------*/
-    public static $required = array(
-        'create' => array(
-            'name',
-            'permissions'
-        )
-    );
-    
     /* Public Methods
     --------------------------------------------*/
     public static function __callStatic($name, $args)
     {
-        // search 
-        if(isset(Helper::getParam()['search']) && Helper::getRequestMethod() == 'GET') {
-            // rip search
-            unset($options['search']);
-        }
-
         $table = end(explode('\\', get_class()));
-        
         return Resource::$table($name, $args);
     }
     /* Protected Methods

@@ -1,24 +1,30 @@
-<?php // -->
+<?php //-->
 
-namespace Api\Page\File;
+namespace Resources;
 
-use Services\File;
+use Modules\Resource;
 
-class Image extends \Page 
+/**
+ * Resource Log
+ * database object of this class object
+ *
+ * @category   resource
+ * @author     javincX
+ */
+class Log
 {
     /* Constants
     --------------------------------------------*/
     /* Public Properties
     --------------------------------------------*/
-    public $auth = false;
-
     /* Protected Properties
     --------------------------------------------*/
     /* Public Methods
     --------------------------------------------*/
-    public function getVariables()
-    {   
-        return File::renderImage();
+    public static function __callStatic($name, $args)
+    {
+        $table = end(explode('\\', get_class()));
+        return Resource::$table($name, $args);
     }
 
     /* Protected Methods

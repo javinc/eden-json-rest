@@ -7,33 +7,34 @@
  * distributed with this package.
  */
 
-use Modules\Helper;
-use Resources\Permission;
 use Modules\Auth;
+use Modules\Helper;
+use Services\Permission;
 
 /**
  * The base class for any class that defines a view.
- * A view controls how templates are loaded as well as 
+ * A view controls how templates are loaded as well as
  * being the final point where data manipulation can occur.
  *
  * @vendor Openovate
  * @package Framework
  */
-class Page extends Eden\Block\Base 
+class Page extends Eden\Block\Base
 {
-	protected $body = array();
+	const USER_ACCESS_KEY = 'access';
 
-	protected $id = NULL;
-	protected $title = NULL;
-	
+	protected $id = null;
+	protected $title = null;
+	protected $body = array();
 	protected $messages = array();
 
     public function __construct() {
         if(!isset($this->auth) || $this->auth === true) {
             Auth::setUser(Auth::check());
         }
+
         // User access control settings
-        $settings = control()->config(control()->registry()->get('application').'/settings');
+        $settings = control()->config('settings');
         if(Auth::getUser() && isset($settings['uac']) && $settings['uac']) {
             if(property_exists($this, 'permissions')) {
                 $this::checkPermission(
@@ -44,45 +45,51 @@ class Page extends Eden\Block\Base
             }
         }
     }
-	
+
 	/**
 	 * returns variables used for templating
 	 *
 	 * @return array
 	 */
-	public function getVariables() 
+	public function getVariables()
 	{
 		return $this->body;
 	}
-	
+
 	/**
 	 * Transform block to string
 	 *
 	 * @param array
 	 * @return string
 	 */
-	public function render() 
+	public function render()
 	{
-		Helper::getHeaders();
+		Helper::renderHeaders();
+		$data = $this->getVariables();
 
-		die(json_encode($this->getVariables()));
+		// check status code if error
+		if(isset($data['error'])) {
+			http_response_code(400);
+		}
+
+		die(json_encode($data));
 	}
-	
-	protected function getHelpers() 
+
+	protected function getHelpers()
 	{
 		$urlRoot 	= control()->path('url');
 		$cdnRoot	= control()->path('cdn');
 		$language 	= control()->language();
-		
+
 		return array(
 			'url' => function() use ($urlRoot) {
 				echo $urlRoot;
 			},
-			
+
 			'cdn' => function() use ($cdnRoot) {
 				echo $cdnRoot;
 			},
-			
+
 			'_' => function($key) use ($language) {
 				echo $language[$key];
 			});
@@ -93,9 +100,9 @@ class Page extends Eden\Block\Base
             return false;
         }
 
-        if(!Permission::checkPermission($user['role_id'], $list[$action])) {
-            Auth::errorCode('ACTION_FORBIDDEN');
-        }
+		if(!in_array($list[$action], $user[self::USER_ACCESS_KEY])) {
+			Auth::errorCode('ACTION_FORBIDDEN');
+		}
 
         return true;
     }
