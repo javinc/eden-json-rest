@@ -1,14 +1,17 @@
 <?php //-->
 
-namespace Services;
+namespace Resources;
+
+use Modules\Resource;
 
 /**
- * Utility for Service & Resource related class
+ * Resource Log
+ * database object of this class object
  *
- * @category   utility
+ * @category   resource
  * @author     javincX
  */
-class Util
+class Log
 {
     /* Constants
     --------------------------------------------*/
@@ -16,10 +19,14 @@ class Util
     --------------------------------------------*/
     /* Protected Properties
     --------------------------------------------*/
-    /* Private Properties
-    --------------------------------------------*/
     /* Public Methods
     --------------------------------------------*/
+    public static function __callStatic($name, $args)
+    {
+        $table = end(explode('\\', get_class()));
+        return Resource::$table($name, $args);
+    }
+
     /* Protected Methods
     --------------------------------------------*/
     /* Private Methods

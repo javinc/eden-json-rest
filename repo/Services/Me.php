@@ -1,32 +1,38 @@
 <?php //-->
 
-namespace Api\Page\File;
+namespace Services;
 
+use Modules\Auth;
 use Modules\Helper;
-use Services\File;
 
-class Raw extends \Page 
+/**
+ * Service Me
+ * business logic of this class object
+ *
+ * @category   service
+ * @author     javincX
+ */
+class Me
 {
     /* Constants
     --------------------------------------------*/
+    const FB_URL = 'http://graph.facebook.com';
+
     /* Public Properties
     --------------------------------------------*/
-    public $auth = false;
-
     /* Protected Properties
+    --------------------------------------------*/
+    /* Private Properties
     --------------------------------------------*/
     /* Public Methods
     --------------------------------------------*/
-    public function getVariables()
-    {   
-        $uuid = Helper::getSegment(0);
-        
-        // retrieve file
-        if($data = File::getFile($uuid)) {
-            return $data;
+    public static function get($userId = null)
+    {
+        if(empty($userId)) {
+            $userId = Auth::getUser()['id'];
         }
 
-        die('file not found');
+        return User::get($userId);
     }
 
     /* Protected Methods

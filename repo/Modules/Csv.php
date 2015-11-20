@@ -5,6 +5,7 @@ namespace Modules;
 use Exception;
 
 /**
+ * Module Csv
  * General available methods for CSV import and export
  *
  * @package    Eden
@@ -24,8 +25,8 @@ class Csv extends \Eden\Core\Base
     public $uploadConfig = array(
         'limit_size' => 1000000,
         'allowed_mime' => array(
-            'text/csv', 
-            'application/octet-stream', 
+            'text/csv',
+            'application/octet-stream',
             'application/vnd.ms-excel'));
 
     /* Protected Properties
@@ -69,7 +70,7 @@ class Csv extends \Eden\Core\Base
      * @return this
      */
     public function addRows(array $data)
-    {        
+    {
         self::check2DimeArray($data);
 
         foreach($data as $value) {
@@ -80,7 +81,7 @@ class Csv extends \Eden\Core\Base
     }
 
     /*
-     * will delete the temp file 
+     * will delete the temp file
      *
      * @return this
      */
@@ -89,7 +90,7 @@ class Csv extends \Eden\Core\Base
         // delete temp file
         if(file_exists($this->tempCsvPath)) {
             unlink($this->tempCsvPath);
-        } 
+        }
 
         return $this;
     }
@@ -114,7 +115,7 @@ class Csv extends \Eden\Core\Base
         header('Content-Encoding: none');
         header('Content-Type: text/csv');  // Change this mime type if the file is not PDF
         header('Content-Disposition: attachment; filename=' . $this->fileName);  // Make the browser display the Save As dialog
-    
+
         // for quick download
         if(!empty($data)) {
             $this->addRows($data);
@@ -137,12 +138,12 @@ class Csv extends \Eden\Core\Base
     public function parse($file = null)
     {
         $data = array();
-        
+
         $filePath = $this->tempCsvPath;
         if($file) {
             $filePath = $file;
         }
-        
+
         // array mode
         $raw = self::getRawData($filePath);
 
@@ -168,7 +169,7 @@ class Csv extends \Eden\Core\Base
         foreach($rows as $row) {
             if($headerCount == count($row)) {
                 $data[] = array_combine($header, $row);
-    
+
                 continue;
             }
 
@@ -230,7 +231,7 @@ class Csv extends \Eden\Core\Base
 
     /*
      * upload configuration
-     * default config 
+     * default config
      *      limit_size      1000000
      *      allowed_mime    text/csv
      *
@@ -242,7 +243,7 @@ class Csv extends \Eden\Core\Base
     public function setUploadConfig(array $config)
     {
         self::checkEmpty($config, 'upload config empty');
-        
+
         $size = 'limit_size';
         $mime = 'allowed_mime';
 
@@ -267,7 +268,7 @@ class Csv extends \Eden\Core\Base
         }
 
         return $this;
-    }    
+    }
 
     /*
      * upload file
@@ -387,12 +388,12 @@ class Csv extends \Eden\Core\Base
     private function append($body)
     {
         $data = array();
-        
+
         // format data
         foreach($this->schema as $name => $title) {
             if(isset($body[$name])) {
                 $data[$name] = $body[$name];
-                
+
                 continue;
             }
 
@@ -412,11 +413,11 @@ class Csv extends \Eden\Core\Base
         return false;
     }
 
-    // get csv data 
+    // get csv data
     private function getCsvData($filePath)
     {
         // prioritized header
-        $header = empty($this->header) ? $this->schema : $this->header; 
+        $header = empty($this->header) ? $this->schema : $this->header;
 
         // get data and format by order
         $data = self::getRawData($filePath);
@@ -434,14 +435,14 @@ class Csv extends \Eden\Core\Base
 
         // append body
         try {
-            // this is necessary in order to get it to actually download the file, 
+            // this is necessary in order to get it to actually download the file,
             // otherwise it will be 0Kb
             $csv = readfile($filePath);
 
             // delete temp file
             $this->clean();
         } catch (Exception $e) {
-            $csv = $e->getMessage();                        
+            $csv = $e->getMessage();
         }
 
         return $csv;

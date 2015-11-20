@@ -2,10 +2,10 @@
 
 namespace Api\Page;
 
-use Services\Test as T;
 use Modules\Rest;
+use Services\Test as T;
 
-class Test extends \Page 
+class Test extends \Page
 {
     /* Constants
     --------------------------------------------*/
@@ -18,7 +18,7 @@ class Test extends \Page
     /* Public Methods
     --------------------------------------------*/
     public function getVariables()
-    {   
+    {
         return Rest::resource(new T(), true);
     }
 

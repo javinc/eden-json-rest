@@ -2,13 +2,19 @@
 
 namespace Services;
 
-use Resources\Test as T;
 use Exception;
 use Modules\Helper;
 use Modules\Auth;
-use Modules\JWT;
-use Services\User;
+use Modules\Jwt;
+use Resources\Test as T;
 
+/**
+ * Service Test
+ * business logic of this class object
+ *
+ * @category   service
+ * @author     javincX
+ */
 class Test
 {
     /* Constants
@@ -22,7 +28,7 @@ class Test
     /* Public Methods
     --------------------------------------------*/
     public static function __callStatic($name, $args)
-    {   
+    {
         return T::$name(current($args), end($args));
     }
 
@@ -44,7 +50,7 @@ class Test
             'filters' => array(
                 'id' => 31)));
 
-        $multi = User::find(array( 
+        $multi = User::find(array(
             'filters' => array(
                 'type' => 'publisher'),
             'fields' => ['id', 'email', 'name'],
@@ -76,16 +82,16 @@ class Test
     {
         $token = Helper::getServer('HTTP_APPLICATION_AUTHORIZATION');
 
-        $jwt = JWT::encode(array(
+        $jwt = Jwt::encode(array(
             "user" => array(
-                'id' => '1', 
+                'id' => '1',
                 'username' => 'admin')));
 
-        try {   
-            JWT::setLeeway(60);
-            return $payload = JWT::decode($token);
-        } catch (Exception $e) {  
-            return $e->getMessage();        
+        try {
+            Jwt::setLeeway(60);
+            return $payload = Jwt::decode($token);
+        } catch (Exception $e) {
+            return $e->getMessage();
         }
     }
 

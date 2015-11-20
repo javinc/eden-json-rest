@@ -1,5 +1,9 @@
-<IfModule mod_rewrite.c>
+# default
+Header set Access-Control-Allow-Origin *
+Header set Access-Control-Allow-Headers "Application-Authorization, Content-Type"
+
 RewriteEngine On
+<IfModule mod_rewrite.c>
 RewriteBase /
 RewriteRule ^index\.php$ - [L]
 RewriteCond %{REQUEST_FILENAME} !-f
@@ -8,3 +12,6 @@ RewriteRule . /index.php [L]
 </IfModule>
 
 php_flag display_errors on
+
+php_value upload_max_filesize 20M
+php_value post_max_size 20M

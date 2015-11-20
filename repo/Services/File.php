@@ -2,15 +2,25 @@
 
 namespace Services;
 
-use Resources\File as F;
+use Exception;
 use Modules\Helper;
 use Modules\Upload;
+use Resources\File as F;
 
+/**
+ * Service File
+ * business logic of this class object
+ *
+ * @category   service
+ * @author     javincX
+ */
 class File
 {
     /* Constants
     --------------------------------------------*/
     const UPLOAD_KEY = 'file';
+    const CACHE_RENDER = true;
+    const CACHE_AGE = '2 day';
 
     /* Public Properties
     --------------------------------------------*/
@@ -18,7 +28,7 @@ class File
     --------------------------------------------*/
     protected static $filePath = 'upload';
     protected static $allowedMime = array(
-            'image/jpeg', 
+            'image/jpeg',
             'image/png');
 
     /* Private Properties
@@ -26,7 +36,7 @@ class File
     /* Public Methods
     --------------------------------------------*/
     public static function __callStatic($name, $args)
-    {   
+    {
         return F::$name(current($args), end($args));
     }
 
@@ -36,11 +46,11 @@ class File
         $data = F::get(array(
             'filters' => array(
                 'uuid' => $uuid)));
-        
+
         // check empty
         if(empty($data)) {
             return false;
-        } 
+        }
 
         // add file path
         $data['path'] = self::getPath() . '/' . $uuid . '.' . $data['extension'];
@@ -49,7 +59,7 @@ class File
     }
 
     public static function getFile($uuid)
-    {   
+    {
         $data = self::getData($uuid);
         // check if empty
         if(empty($data)) {
@@ -102,12 +112,12 @@ class File
                 'mime' => $data['meta']['type'],
                 'size' => $data['meta']['size']));
         } catch (Exception $e) {
-            return Helper::error(
-                'FILE_UPLOAD_ERROR',
+            return Helper::error('FILE_UPLOAD_ERROR',
                 $e->getMessage());
         }
 
-        return $result;
+        return Helper::error('FILE_UPLOAD_UNKNOWN_ERROR',
+            'something when wrong');
     }
 
     public static function renderImage()
@@ -124,14 +134,19 @@ class File
 
         // http://host.com/image/400x200/ed9b3d2e9c84f59c513bb0e5081f0945
         if(($tmp = explode('x', $dimension)) && sizeof($tmp) > 1){
-            $dim_w = intval($tmp[0]);
-            $dim_h = intval($tmp[1]);
+            $width = intval($tmp[0]);
+            $height = intval($tmp[1]);
         }
-        
+
         // get image path
         $file = self::getData($uuid);
         if(empty($file)) {
             die('file not found');
+        }
+
+        // cache mode
+        if(self::CACHE_RENDER) {
+            self::cacheMode();
         }
 
         // load the image object
@@ -139,22 +154,39 @@ class File
         // keep original ratio
         if(empty($dimension)) {
             self::dispose($file['path'], $file['name'], $file['mime'], $file['size']);
-        // parameter passed is one (http://host.com/image/100/ed9b3d2e9c84f59c513bb0e5081f0945)
-        } else if($dimension > 0 && !isset($dim_h)) {
+        // parameter passed is one /image/*/300
+        } else if($dimension > 0 && !isset($height)) {
             // resize the image
             $image->resize(null, $dimension);
             // crop the image
             $image->crop($dimension, $dimension);
-        // parameter passed is for width and height (http://host.com/image/300x100/ed9b3d2e9c84f59c513bb0e5081f0945)
-        } else if($dimension > 0 && isset($dim_h)) {
+        // parameter passed is for width only /image/*/300x0
+        } else if($dimension > 0 && $height == 0) {
+            // resize width only
+            $image->resize($width, null);
+        // parameter passed is for width only /image/*/300x0
+        } else if($dimension > 0 && $width == 0) {
+            // resize width only
+            $image->resize(null, $height);
+        // parameter passed is for width and height /image/*/300x200
+        } else if($dimension > 0 && isset($height)) {
             // scale the image to fit specific dimensions
-            $image->scale($dim_w, $dim_h);
+            $image->scale($width, $height);
             // crop the image
-            $image->crop($dim_w, $dim_h);           
+            $image->crop($width, $height);
         }
 
-        header('Content-type: image/' . $file['extension']);
+        header('Content-Type: image/' . $file['extension']);
+
         die($image);
+    }
+
+    private static function cacheMode()
+    {
+        session_start();
+        header('Cache-Control: private, max-age=10800, pre-check=10800');
+        header('Pragma: private');
+        header('Expires: ' . date(DATE_RFC822, strtotime(' ' . self::CACHE_AGE)));
     }
 
     /* Protected Methods

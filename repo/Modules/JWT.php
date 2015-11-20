@@ -3,16 +3,16 @@
 namespace Modules;
 
 use Exception;
-use Modules\Helper;
-use \Firebase\JWT\JWT as J;
+use Firebase\JWT\JWT as J;
 
-/**
- * JWT wrapper
- *
- * @category   utility
- * @author     javincX
- */
-class JWT
+ /**
+  * Module Jwt
+  * tool, wrapper, and helper of this class object
+  *
+  * @category   utility
+  * @author     javincX
+  */
+class Jwt
 {
     /* Constants
     --------------------------------------------*/
@@ -38,7 +38,7 @@ class JWT
         try {
             return J::encode($setting['payload'], $setting['key']);
         } catch (Exception $e) {
-            return false;          
+            return false;
         }
     }
 

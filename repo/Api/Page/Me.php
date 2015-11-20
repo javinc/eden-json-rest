@@ -1,24 +1,28 @@
-<?php // -->
+<?php //-->
 
-namespace Api\Page\File;
+namespace Api\Page;
 
-use Services\File;
+use Modules\Helper;
+use Services\Me as M;
 
-class Image extends \Page 
+class Me extends \Page
 {
     /* Constants
     --------------------------------------------*/
     /* Public Properties
     --------------------------------------------*/
-    public $auth = false;
-
     /* Protected Properties
     --------------------------------------------*/
     /* Public Methods
     --------------------------------------------*/
     public function getVariables()
-    {   
-        return File::renderImage();
+    {
+        // restrict the username not to be change
+        if(Helper::getRequestMethod() == 'GET') {
+            return M::get();
+        }
+
+        return Helper::error('METHOD_NOT_ALLOWED', 'method not allowed');
     }
 
     /* Protected Methods

@@ -2,20 +2,38 @@
 
 namespace Services;
 
-use Resources\User as U;
-use Modules\JWT;
+use Modules\Auth;
 use Modules\Helper;
+use Resources\User as U;
+use Resources\UserSetting;
 
+/**
+ * Service User
+ * business logic of this class object
+ *
+ * @category   service
+ * @author     javincX
+ */
 class User
 {
     /* Constants
     --------------------------------------------*/
-    const USER_FIELD = 'username';
+    const ADMIN_TYPE = 1;
+    const CLIENT_TYPE = 0;
+
+    const USER_FIELD = 'email';
     const PASS_FIELD = 'password';
     const STATUS_FIELD = 'status';
-    
+
     /* Public Properties
     --------------------------------------------*/
+    public static $required = array(
+        'create' => array(
+            'first_name',
+            'last_name',
+            'email',
+            'password'));
+
     /* Protected Properties
     --------------------------------------------*/
     /* Private Properties
@@ -23,61 +41,69 @@ class User
     /* Public Methods
     --------------------------------------------*/
     public static function __callStatic($name, $args)
-    {   
+    {
         return U::$name(current($args), end($args));
     }
 
-    public static function login($payload)
+    public static function create($data)
     {
-        // check required
-        if($field = Helper::getMissingFields($payload, array(
-            self::USER_FIELD, 
-            self::PASS_FIELD))) {
-            return Helper::error(
-                'LOGIN_FIELDS_REQUIRED',
-                $field . ' required, empty given');
-        }
-
-        // hash password
-        $payload[self::PASS_FIELD] = sha1($payload[self::PASS_FIELD]);
-        
-        $user = User::get(array('filters' => $payload));
-        
-        // invalid
-        if(!$user) {
-            return Helper::error(
-                'LOGIN_INVALID',
-                'Invalid username or password');
-        }
-
-        // disabled user no login
-        if($user[self::STATUS_FIELD] == 'disabled') {
-            return Helper::error(
-                'LOGIN_DISABLED',
-                'User is disabled');
-        }
-
-        // remove fields
-        unset($user[self::PASS_FIELD]);
-
-        // get permissions
-        $permissions = RolePermission::find(array(
+        // check if email exists
+        if(U::get(array(
             'filters' => array(
-                'role_id' => $user['role_id']),
-            'relate' => array('permission')));
-
-        // stack permission
-        $user['access'] = array();
-        foreach($permissions as $permission) {
-            $user['access'][] = $permission['permission']['name'];
+                'email' => $data['email']),
+            'fields' => array('id')))) {
+            return Helper::error('USER_EMAIL_EXISTS',
+                '\'' . $data['email'] . '\' email already exists');
         }
 
-        // generate JWT
-        $user['token'] = JWT::encode(array('user' => $user));
+        // hash id
+        $data['password'] = sha1($data['password']);
+
+        // save the user
+        $user = U::create($data);
 
         return $user;
     }
-    
+
+    public static function update($data, $filter)
+    {
+        // check password if exists then update it
+        // else dont
+        if(isset($data['password']) && trim($data['password']) != '') {
+            $data['password'] = sha1($data['password']);
+        } else if(trim($data['password']) == '') {
+            unset($data['password']);
+        }
+
+        // save the user
+        $user = U::update($data, $filter);
+
+        return $user;
+    }
+
+    public static function getClientById($id, $options = array())
+    {
+        $options['filters']['id'] = $id;
+        $options['filters']['role_id'] = self::CLIENT_TYPE;
+
+        return self::get($options);
+    }
+
+    public static function findByType($type, $options = array())
+    {
+        // default will be client
+        $roleId = self::CLIENT_TYPE;
+        switch ($type) {
+        case 'admin':
+            $roleId = self::ADMIN_TYPE;
+            break;
+        }
+
+        $options['filters']['role_id'] = $roleId;
+
+        return self::find($options);
+    }
+
     /* Protected Methods
     --------------------------------------------*/
     /* Private Methods
