@@ -160,6 +160,20 @@ CREATE TABLE IF NOT EXISTS `user` (
 INSERT INTO `user` (`id`, `role_id`, `email`, `password`, `first_name`, `last_name`, `status`, `created_at`, `updated_at`, `deleted_at`) VALUES
 (1000, 1, 'admin@mashdrop.com', '11f6ad8ec52a2984abaafd7c3b516503785c2072', 'admin', 'super', 'active', NULL, NULL, NULL);
 
+--
+-- Table structure for table `test`
+--
+
+CREATE TABLE IF NOT EXISTS `test` (
+  `id` int(11) unsigned  NOT NULL AUTO_INCREMENT,
+  `title` varchar(255) NULL,
+  `description` varchar(255) NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
+  `deleted_at` timestamp NULL DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
+
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
