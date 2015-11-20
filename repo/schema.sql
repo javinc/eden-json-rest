@@ -158,7 +158,7 @@ CREATE TABLE IF NOT EXISTS `user` (
 --
 
 INSERT INTO `user` (`id`, `role_id`, `email`, `password`, `first_name`, `last_name`, `status`, `created_at`, `updated_at`, `deleted_at`) VALUES
-(1000, 1, 'admin@mashdrop.com', '11f6ad8ec52a2984abaafd7c3b516503785c2072', 'admin', 'super', 'active', NULL, NULL, NULL);
+(1000, 1, 'admin@ejr.com', '11f6ad8ec52a2984abaafd7c3b516503785c2072', 'admin', 'super', 'active', NULL, NULL, NULL);
 
 --
 -- Table structure for table `test`
