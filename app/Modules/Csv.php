@@ -12,7 +12,7 @@ use Exception;
  * @category   utility
  * @author     javincX
  */
-class Csv extends \Eden\Core\Base
+class Csv
 {
     /* Constants
     -------------------------------*/
@@ -42,7 +42,7 @@ class Csv extends \Eden\Core\Base
 
     public static function i()
     {
-        return self::getSingleton(__CLASS__);
+        return new Csv();
     }
 
     /* Public Methods

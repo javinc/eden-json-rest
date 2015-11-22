@@ -369,7 +369,7 @@ class Resource
     --------------------------------------------*/
     /* Private Methods
     --------------------------------------------*/
-    // Private ctor so nobody else can instance it
+    // Private constructor so nobody else can instance it
     private function __construct()
     {
     }
