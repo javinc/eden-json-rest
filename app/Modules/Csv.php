@@ -12,7 +12,7 @@ use Exception;
  * @category   utility
  * @author     javincX
  */
-class CSV
+class Csv
 {
     /* Constants
     -------------------------------*/
