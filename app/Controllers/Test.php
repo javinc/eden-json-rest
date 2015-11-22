@@ -5,7 +5,7 @@ namespace App\Controllers;
 use Modules\Rest;
 use Services\Test as T;
 
-class Test extends \Page
+class Test
 {
     /* Constants
     --------------------------------------------*/
@@ -17,7 +17,7 @@ class Test extends \Page
     --------------------------------------------*/
     /* Public Methods
     --------------------------------------------*/
-    public function getVariables()
+    public function exec()
     {
         return Rest::resource(new T(), true);
     }

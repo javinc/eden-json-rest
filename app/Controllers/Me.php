@@ -5,7 +5,7 @@ namespace App\Controllers;
 use Modules\Helper;
 use Services\Me as M;
 
-class Me extends \Page
+class Me
 {
     /* Constants
     --------------------------------------------*/
@@ -15,7 +15,7 @@ class Me extends \Page
     --------------------------------------------*/
     /* Public Methods
     --------------------------------------------*/
-    public function getVariables()
+    public function exec()
     {
         // restrict the username not to be change
         if(Helper::getRequestMethod() == 'GET') {

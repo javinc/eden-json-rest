@@ -7,7 +7,7 @@ use Modules\Rest;
 use Services\User as U;
 use Services\Permission;
 
-class User extends \Page
+class User
 {
     /* Constants
     --------------------------------------------*/
@@ -24,7 +24,7 @@ class User extends \Page
         'DELETE' => Permission::USER_REMOVE,
     );
 
-    public function getVariables()
+    public function exec()
     {
         // restrict the username not to be change
         if(Helper::getRequestMethod() == 'PATCH') {

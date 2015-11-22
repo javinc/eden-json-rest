@@ -6,7 +6,7 @@ use Modules\Helper;
 use Modules\Rest;
 use Services\File as F;
 
-class File extends \Page
+class File
 {
     /* Constants
     --------------------------------------------*/
@@ -16,7 +16,7 @@ class File extends \Page
     --------------------------------------------*/
     /* Public Methods
     --------------------------------------------*/
-    public function getVariables()
+    public static function exec()
     {
         // restrict the username not to be change
         if(Helper::getRequestMethod() == 'GET') {

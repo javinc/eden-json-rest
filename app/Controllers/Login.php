@@ -5,7 +5,7 @@ namespace Api\Page;
 use Modules\Helper;
 use Services\User\Login as L;
 
-class Login extends \Page
+class Login
 {
     /* Constants
     --------------------------------------------*/
@@ -17,7 +17,7 @@ class Login extends \Page
     --------------------------------------------*/
     /* Public Methods
     --------------------------------------------*/
-    public function getVariables()
+    public function exec()
     {
         // public access for post
         if(Helper::getRequestMethod() == 'POST') {

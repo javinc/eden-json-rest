@@ -7,6 +7,9 @@ use Modules\Helper;
 use Modules\Upload;
 use Resources\File as F;
 
+// auto invoke
+
+
 /**
  * defines the starting point of every site call.
  * starts laying out how classes and methods are handled.
@@ -26,6 +29,19 @@ class App
     --------------------------------------------*/
     /* Public Methods
     --------------------------------------------*/
+    public function __construct()
+    {
+        eden('server')->add(function($request, $response) {
+            // pass request and response as args on the controller
+            // update Helper module
+            // update Resource module
+            // write a router and make it as a module
+            // 
+
+            $response->set('body', 'Hello World!');
+        });
+    }
+
     /* Protected Methods
     --------------------------------------------*/
     /* Private Methods

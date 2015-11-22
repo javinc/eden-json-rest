@@ -4,7 +4,7 @@ namespace App\Controllers;
 
 use Modules\Helper;
 
-class Index extends \Page
+class Index
 {
     /* Constants
     --------------------------------------------*/
@@ -16,7 +16,7 @@ class Index extends \Page
     --------------------------------------------*/
     /* Public Methods
     --------------------------------------------*/
-    public function getVariables()
+    public function exec()
     {
         return Helper::error('NOT_FOUND', 'page not found');
     }
