@@ -22,6 +22,7 @@ class Password
     const HASH_SEPERATOR = '.';
 
     const URL_PREFIX = 'password/reset';
+
     /* Public Properties
     --------------------------------------------*/
     /* Protected Properties
