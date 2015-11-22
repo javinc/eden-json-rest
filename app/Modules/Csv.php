@@ -12,7 +12,7 @@ use Exception;
  * @category   utility
  * @author     javincX
  */
-class Csv
+class CSV
 {
     /* Constants
     -------------------------------*/
@@ -38,11 +38,6 @@ class Csv
     {
         // generate temp filepath
         $this->tempCsvPath = rtrim(sys_get_temp_dir(), DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR . self::getTempFile();
-    }
-
-    public static function i()
-    {
-        return new Csv();
     }
 
     /* Public Methods
