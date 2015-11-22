@@ -1,10 +1,13 @@
 {
     "require": {
-        "eden/mysql": "1.0.3",
-        "eden/image": "1.0.3",
+        "eden/server": "^4.0",
+        "eden/registry": "^4.0",
+        "eden/core": "^4.0",
+        "eden/image": "^4.0",
+        "eden/mysql": "^4.0",
         "firebase/php-jwt": "^3.0",
         "phpmailer/phpmailer": "^5.2",
         "league/oauth2-client": "~1.0",
-        "eden/server": "^4.0"
+        "league/oauth2-google": "^1.0"
     }
 }
