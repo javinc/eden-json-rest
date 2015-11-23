@@ -5,6 +5,11 @@
  */
 
 require __DIR__.'/../app/App.php';
+
+app()
+
+->run();
+
 //
 // /* Get Application
 // -------------------------------*/

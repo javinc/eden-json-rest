@@ -3,6 +3,7 @@
 require_once __DIR__.'/../vendor/autoload.php';
 
 use Modules\Helper;
+use Eden\Core\Base as Core;
 
 /**
  * The starting point of every application call. If you are only
@@ -28,7 +29,7 @@ function app() {
  * @vendor Openovate
  * @package Framework
  */
-class App
+class App extends Core
 {
     /* Constants
     --------------------------------------------*/
@@ -40,28 +41,33 @@ class App
     --------------------------------------------*/
     /* Public Methods
     --------------------------------------------*/
-    public function __construct()
+    public function run()
     {
-        eden('server')
-            ->route('*', function($request, $response) {
-                // pass request and response as args on the controller
-                // update Helper module
-                // update Resource module
-                // write a router and make it as a module
-                //
-
-                $response->set('body', 'Hello World!');
-            })
-            ->render();
-    }
-
-    public static function i()
-    {
-
+        try {
+            $this('server')
+                ->all('*', function($request, $response) {
+                    $response->set('body', 'Hello World!');
+                })
+                ->render();
+        } catch (Exception $e) {
+            die($e->getMessage());
+        }
     }
 
     /* Protected Methods
     --------------------------------------------*/
+    protected function __construct()
+    {
+    }
+
+    private function __clone()
+    {
+    }
+
+    private function __wakeup()
+    {
+    }
+
     /* Private Methods
     --------------------------------------------*/
 }
