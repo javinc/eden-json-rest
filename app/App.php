@@ -2,7 +2,6 @@
 
 require_once __DIR__.'/../vendor/autoload.php';
 
-use Modules\Helper;
 use Eden\Core\Base as Core;
 
 /**
@@ -46,6 +45,11 @@ class App extends Core
         try {
             $this('server')
                 ->all('*', function($request, $response) {
+                    // print_r($request);
+                    // print_r($response);
+
+                    Index::exec();
+
                     $response->set('body', 'Hello World!');
                 })
                 ->render();

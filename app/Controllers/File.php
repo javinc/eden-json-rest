@@ -1,6 +1,6 @@
 <?php //-->
 
-namespace App\Controllers;
+namespace Controllers;
 
 use Modules\Helper;
 use Modules\Rest;

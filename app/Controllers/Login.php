@@ -1,6 +1,6 @@
 <?php //-->
 
-namespace Api\Page;
+namespace Page;
 
 use Modules\Helper;
 use Services\User\Login as L;

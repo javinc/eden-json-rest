@@ -1,6 +1,6 @@
 <?php //-->
 
-namespace App\Controllers;
+namespace Controllers;
 
 use Modules\Helper;
 
@@ -16,9 +16,10 @@ class Index
     --------------------------------------------*/
     /* Public Methods
     --------------------------------------------*/
-    public function exec()
+    public static function exec()
     {
-        return Helper::error('NOT_FOUND', 'page not found');
+        die('x');
+        // return Helper::error('NOT_FOUND', 'page not found');
     }
 
     /* Protected Methods
