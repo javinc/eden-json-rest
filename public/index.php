@@ -8,7 +8,10 @@ require __DIR__.'/../app/App.php';
 
 app()
 
-->run();
+// ->add(Eve\App\Front\Route::i()->import())
+
+//and this is the default
+->defaultBootstrap();
 
 //
 // /* Get Application
