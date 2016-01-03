@@ -6,90 +6,25 @@
 
 require __DIR__.'/../app/App.php';
 
-app()
-
-// ->add(Eve\App\Front\Route::i()->import())
-
-//and this is the default
-->defaultBootstrap();
+// app()->test();
 
 //
-// /* Get Application
-// -------------------------------*/
-// control()
+// app('registry')->set('x', 'sample');
 //
-// /* Set Paths
-// -------------------------------*/
-// ->setApplication('Api')
-//
-// /* Set Paths
-// -------------------------------*/
-// ->setPaths()
-//
-// /* Set Debug
-// -------------------------------*/
-// ->setDebug()
-//
-// /* Trigger Config Event
-// -------------------------------*/
-// ->trigger('config')
-//
-// /* Start Packages
-// -------------------------------*/
-// ->startPackages()
-//
-// /* Trigger Init Event
-// -------------------------------*/
-// ->trigger('init')
-//
-// /* Set Database
-// -------------------------------*/
-// ->setDatabases()
-//
-// /* Set Timezone
-// -------------------------------*/
-// ->setTimezone('Asia/Manila')
-//
-// /* Trigger Init Event
-// -------------------------------*/
-// ->trigger('config')
-//
-// /* Start Session
-// -------------------------------*/
-// ->startSession()
-//
-// /* Trigger Session Event
-// -------------------------------*/
-// ->trigger('session')
-//
-// /* Set Request
-// -------------------------------*/
-// ->setRequest()
-//
-// /* Trigger Request Event
-// -------------------------------*/
-// ->trigger('request')
-//
-// /* Set Response
-// -------------------------------*/
-// ->setResponse('index')
-//
-// /* Trigger Response Event
-// -------------------------------*/
-// ->trigger('response')
-//
-// /* Render Output
-// -------------------------------*/
-// ->render()
-//
-// /* Trigger Render Event
-// -------------------------------*/
-// ->trigger('render')
-//
-// /* Save Translation
-// -------------------------------*/
-// //->saveTranslation()
-//
-// /* Trigger Shutdown Event
-// -------------------------------*/
-// ->trigger('shutdown');
+// var_dump(app('registry'));
+
+App::i()
+
+->defaultPaths()
+->defaultDatabases()
+->trigger('config')
+->defaultTimezone('Asia/Manila')
+->trigger('init')
+->defaultSession()
+->trigger('session')
+->defaultRouting()
+->trigger('request')
+->server()
+->trigger('response')
+->render();
+;

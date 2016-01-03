@@ -16,9 +16,15 @@ class Index
     --------------------------------------------*/
     /* Public Methods
     --------------------------------------------*/
-    public static function exec()
+    public function render()
     {
-        die('x');
+        $response->set('body', 'from Controllers Index');
+    }
+
+    public static function process($request, $response)
+    {
+        $response->set('body', 'from Controllers Index');
+
         // return Helper::error('NOT_FOUND', 'page not found');
     }
 
