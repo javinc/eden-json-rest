@@ -6,15 +6,7 @@
 
 require __DIR__.'/../app/App.php';
 
-// app()->test();
-
-//
-// app('registry')->set('x', 'sample');
-//
-// var_dump(app('registry'));
-
 App::i()
-
 ->defaultPaths()
 ->defaultDatabases()
 ->trigger('config')
@@ -27,4 +19,3 @@ App::i()
 ->server()
 ->trigger('response')
 ->render();
-;

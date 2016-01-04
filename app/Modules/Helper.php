@@ -32,10 +32,10 @@ class Helper
     public static function getJson($field = null, $panic = true)
     {
         if($input = (array) json_decode(file_get_contents('php://input'))) {
-            control()->registry()->set('input', $input);
+            app()->registry()->set('input', $input);
         }
 
-        $data = self::getData((array)control()->registry()['input'], $field);
+        $data = self::getData((array) app()->registry()['input'], $field);
 
         // check if invalid json
         if(empty($data) && $data !== null) {
@@ -58,7 +58,7 @@ class Helper
     public static function getParam($field = null)
     {
         return self::getData(
-            control()->registry()['get'],
+            app()->registry()['get'],
             $field);
     }
 
@@ -71,7 +71,7 @@ class Helper
     public static function getSegment($index = null)
     {
         return self::getData(
-            control()->registry()['request']['variables'],
+            app()->registry()['request']['variables'],
             $index);
     }
 
@@ -94,7 +94,7 @@ class Helper
     public static function getServer($index = null)
     {
         return self::getData(
-            control()->registry()['server'],
+            app()->registry()['server'],
             $index);
     }
 
@@ -106,7 +106,7 @@ class Helper
     public static function getFile($field = null)
     {
         return self::getData(
-            control()->registry()['files'],
+            app()->registry()['files'],
             $field);
     }
 
@@ -118,7 +118,7 @@ class Helper
     public static function getSetting($index = null)
     {
         return self::getData(
-            control()->config('/settings'),
+            app()->config('/settings'),
             $index);
     }
 
@@ -256,7 +256,7 @@ class Helper
      */
     public static function debug($data = null, $die = false)
     {
-        control()->inspect($data);
+        app()->inspect($data);
 
         if($die) {
             die();

@@ -23,6 +23,7 @@ class Index
 
     public static function process($request, $response)
     {
+        print_r(Helper::getServer());
         $response->set('body', 'from Controllers Index');
 
         // return Helper::error('NOT_FOUND', 'page not found');
