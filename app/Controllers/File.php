@@ -16,7 +16,7 @@ class File
     --------------------------------------------*/
     /* Public Methods
     --------------------------------------------*/
-    public static function exec()
+    public static function main()
     {
         // restrict the username not to be change
         if(Helper::getRequestMethod() == 'GET') {

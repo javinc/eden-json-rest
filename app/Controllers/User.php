@@ -24,7 +24,7 @@ class User
         'DELETE' => Permission::USER_REMOVE,
     );
 
-    public function exec()
+    public function main()
     {
         // restrict the username not to be change
         if(Helper::getRequestMethod() == 'PATCH') {

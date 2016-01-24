@@ -19,15 +19,9 @@ class Test
     --------------------------------------------*/
     /* Public Methods
     --------------------------------------------*/
-    public static function main()
+    public static function main($request, $response)
     {
-        // return T::get(1);
         return Rest::resource(new T(), true);
-    }
-
-    public static function xmain($request, $response)
-    {
-        return Helper::error('NOT_FOUND', 'page not found');
     }
 
     /* Protected Methods

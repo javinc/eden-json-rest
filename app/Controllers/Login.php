@@ -1,6 +1,6 @@
 <?php //-->
 
-namespace Page;
+namespace Controllers;
 
 use Modules\Helper;
 use Services\User\Login as L;
@@ -17,7 +17,7 @@ class Login
     --------------------------------------------*/
     /* Public Methods
     --------------------------------------------*/
-    public function exec()
+    public function main()
     {
         // public access for post
         if(Helper::getRequestMethod() == 'POST') {

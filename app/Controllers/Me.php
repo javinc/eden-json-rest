@@ -15,7 +15,7 @@ class Me
     --------------------------------------------*/
     /* Public Methods
     --------------------------------------------*/
-    public static function exec()
+    public static function main()
     {
         die('qqq');
         // restrict the username not to be change
