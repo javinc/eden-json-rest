@@ -71,7 +71,7 @@ class Helper
     public static function getSegment($index = null)
     {
         return self::getData(
-            self::getRequest('variables'),
+            self::getRequest('segment'),
             $index);
     }
 

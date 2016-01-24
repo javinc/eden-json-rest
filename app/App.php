@@ -276,7 +276,6 @@ class App extends \Eden\Server\Index
 			$variables = array();
 			$action = null;
 			$buffer = $array;
-
 			while(count($buffer) > 1) {
 				$parts = ucwords(implode(' ', $buffer));
 				$parts = empty($parts) ? '/Index' : $parts;
@@ -325,15 +324,14 @@ class App extends \Eden\Server\Index
 
 				//try to see if it's a class
 				$default = $prefix.'\\'.$defaultAction;
-
 				if(class_exists($default)) {
 					$action = $default;
 				}
 			}
 
 			//set the variables if it has not been set
-			if(!$request->isKey('variables')) {
-				$request->set('variables', $variables);
+			if(!$request->isKey('segment')) {
+				$request->set('segment', $variables);
 			}
 
 			//if we have an action

@@ -54,6 +54,8 @@ class Rest
                 $method . ' method not available');
         }
 
+        // print_r([$resource, $method, self::$methodsAvailable[$method]]);die();
+
         // rest call
         return self::process($method, $resource, self::$methodsAvailable[$method]);
     }

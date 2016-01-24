@@ -21,7 +21,7 @@ class Test
     --------------------------------------------*/
     public static function main()
     {
-        // return T::find();
+        // return T::get(1);
         return Rest::resource(new T(), true);
     }
 
