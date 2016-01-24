@@ -3,8 +3,6 @@
 namespace Controllers;
 
 use Modules\Rest;
-use Modules\Helper;
-
 use Services\Test as T;
 
 class Test

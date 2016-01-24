@@ -372,71 +372,23 @@ class App extends \Eden\Server\Index
 		return $this;
 	}
 
-	// handler
-	public function defaultResponse()
-	{
-		$this->all('**', function($request, $response) {
-			//if there is already a body or not an action
-			if($response->isKey('body') || !$response->isKey('action')) {
-				//do nothing
-				return;
-			}
-
-			$action = $response->get('action');
-
-			if(is_callable($action)) {
-				$action = $action->bindTo($this, get_class($this));
-				//call it
-				$results = $action($request, $response);
-				//if there are results
-				//and no body was set
-				if($results
-				&& is_scalar($results)
-				&& !$response->isKey('body')) {
-					$response->set('body', (string) $results);
-				}
-
-				return;
-			}
-
-			//it's a class
-			$instance = new $action();
-
-			//call it
-			$results = $instance
-				->setRequest($request)
-				->setResponse($response)
-				->render();
-
-			//if there are results
-			//and no body was set
-			if($results
-			&& is_scalar($results)
-			&& !$response->isKey('body')) {
-				$response->set('body', (string) $results);
-			}
-		});
-
-		return $this;
-	}
-
 	public function server()
 	{
 		$this->all('**', function($request, $response) {
-				// call Controllers
-				$action = $response->get('action');
-				$data = $action::main($request, $response);
+			// call Controllers
+			$action = $response->get('action');
+			$data = $action::main($request, $response);
 
-				// check status code if error
-				if(isset($data['error'])) {
-					http_response_code(400);
-				}
+			// check status code if error
+			if(isset($data['error'])) {
+				http_response_code(400);
+			}
 
-				// default output json
-				$output = json_encode($data);
+			// default output json
+			$output = json_encode($data);
 
-				$response->set('body', $output);
-			});
+			$response->set('body', $output);
+		});
 
 		return $this;
 	}
