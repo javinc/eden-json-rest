@@ -381,12 +381,15 @@ class App extends \Eden\Server\Index
 
 			// check status code if error
 			if(isset($data['error'])) {
-				http_response_code(400);
+				$response->set('code', 400);
 			}
 
 			// default output json
 			$output = json_encode($data);
 
+			Helper::renderHeaders($request);
+
+			$response->set('headers', 'Content-Type', 'application/json');
 			$response->set('body', $output);
 		});
 

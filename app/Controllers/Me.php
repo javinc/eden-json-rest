@@ -17,7 +17,6 @@ class Me
     --------------------------------------------*/
     public static function main()
     {
-        die('qqq');
         // restrict the username not to be change
         if(Helper::getRequestMethod() == 'GET') {
             return M::get();

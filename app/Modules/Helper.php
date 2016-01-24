@@ -163,8 +163,8 @@ class Helper
         header('Content-Type: application/json');
         // header('Access-Control-Allow-Origin: *');
         // header('Access-Control-Allow-Headers: Origin, Content-Type, Accept, '
-            // . 'Authorization, X-Requested-With, Application-Authorization');
-        header('Access-Control-Allow-Methods: GET, POST, PATCH, DELETE, OPTIONS');
+        // . 'Authorization, X-Requested-With, Application-Authorization');
+        header('Access-Control-Allow-Methods: GET, POST, PUT, DELETE, OPTIONS');
     }
 
     /*
