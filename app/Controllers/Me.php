@@ -1,6 +1,6 @@
 <?php //-->
 
-namespace App\Controllers;
+namespace Controllers;
 
 use Modules\Helper;
 use Services\Me as M;
@@ -15,8 +15,9 @@ class Me
     --------------------------------------------*/
     /* Public Methods
     --------------------------------------------*/
-    public function exec()
+    public static function exec()
     {
+        die('qqq');
         // restrict the username not to be change
         if(Helper::getRequestMethod() == 'GET') {
             return M::get();

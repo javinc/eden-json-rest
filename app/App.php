@@ -76,10 +76,21 @@ class App extends \Eden\Server\Index
 			'services' => 'Services',
 			//Other Folders
 			'public' => '../public');
+
 		foreach($paths as $key => $path) {
 			if(!$this->registry()->isKey('path', strtolower($key))) {
 				$this->registry()->set('path', strtolower($key), $root . '/' . $path);
 			}
+		}
+
+		// include files
+		foreach ([
+			'controllers',
+			'modules',
+			'resources',
+			'services',
+			] as $keyPath) {
+			$this->includeFiles($this->registry()->get('path', $keyPath));
 		}
 
 		return $this;
@@ -256,7 +267,7 @@ class App extends \Eden\Server\Index
 				//try to see if it's callable
 				$file = $root.str_replace(' ', '/', $parts).'.php';
 				if(file_exists($file)) {
-					$contents = include($file);
+					$contents = $file;
 
 					if(is_callable($contents)) {
 						$action = $contents;
@@ -289,7 +300,7 @@ class App extends \Eden\Server\Index
 				$file = $root.'/'.$defaultAction.'.php';
 
 				if(file_exists($file)) {
-					$contents = include($file);
+					$contents = $file;
 					if(is_callable($contents)) {
 						$action = $contents;
 					}
@@ -409,4 +420,18 @@ class App extends \Eden\Server\Index
     --------------------------------------------*/
     /* Private Methods
     --------------------------------------------*/
+	private function includeFiles($dir)
+	{
+		// include all php files
+		foreach (glob($dir . '/*') as $file) {
+			if (is_dir($file)) {
+				$this->includeFiles($file);
+				continue;
+			}
+
+		    if (is_file($file)) {
+		        require_once $file;
+		    }
+		}
+	}
 }
