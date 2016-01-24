@@ -25,7 +25,7 @@ class Rest
     protected static $methodsAvailable = array(
         'GET' => 'find',
         'POST' => 'create',
-        'PATCH' => 'update',
+        'PUT' => 'update',
         'DELETE' => 'remove');
 
     /* Public Methods
@@ -131,7 +131,7 @@ class Rest
         return $resource::$resourceMethod($payload);
     }
 
-    private static function patch($resource, $resourceMethod)
+    private static function put($resource, $resourceMethod)
     {
         // check if singles
         if($id = Helper::getSegment(0)) {
