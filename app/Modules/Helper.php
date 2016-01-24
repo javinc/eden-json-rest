@@ -35,7 +35,7 @@ class Helper
             app()->registry()->set('input', $input);
         }
 
-        $data = self::getData((array) app()->registry()['input'], $field);
+        $data = self::getData((array) app()->registry()->get('input'), $field);
 
         // check if invalid json
         if(empty($data) && $data !== null) {
@@ -58,7 +58,7 @@ class Helper
     public static function getParam($field = null)
     {
         return self::getData(
-            app()->registry()['get'],
+            self::getRequest('get'),
             $field);
     }
 
@@ -71,7 +71,7 @@ class Helper
     public static function getSegment($index = null)
     {
         return self::getData(
-            app()->registry()['request']['variables'],
+            self::getRequest('variables'),
             $index);
     }
 
@@ -82,7 +82,6 @@ class Helper
      */
     public static function getRequestMethod()
     {
-
         return self::getServer()['REQUEST_METHOD'];
     }
 
@@ -94,8 +93,23 @@ class Helper
     public static function getServer($index = null)
     {
         return self::getData(
-            app()->registry()['server'],
+            self::getRequest('server'),
             $index);
+    }
+
+    /*
+     * get $_FILES data
+     *
+     * @return array
+     */
+    public static function getRequest($index = null)
+    {
+        $data = app()->registry();
+        if($index == null) {
+            return $data->get('request');
+        }
+
+        return $data->get('request', $index);
     }
 
     /*
@@ -106,7 +120,7 @@ class Helper
     public static function getFile($field = null)
     {
         return self::getData(
-            app()->registry()['files'],
+            self::getRequest('files'),
             $field);
     }
 

@@ -254,6 +254,9 @@ class App extends \Eden\Server\Index
 	{
 		//just call the parent
 		$this->all('**', function($request, $response) {
+			// register request data
+			$this->registry()->set('request', $request);
+
 			//if there is already a body or action
 			if($response->isKey('body') || $request->isKey('action')) {
 				//do nothing
