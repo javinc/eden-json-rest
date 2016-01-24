@@ -18,7 +18,7 @@ class File
     --------------------------------------------*/
     public static function main()
     {
-        // restrict the username not to be change
+        // read only file list
         if(Helper::getRequestMethod() == 'GET') {
             return Rest::resource(new F(), true);
         }
