@@ -11,7 +11,7 @@ class Test
     --------------------------------------------*/
     /* Public Properties
     --------------------------------------------*/
-    // public $auth = false;
+    // public static $auth = false;
 
     /* Protected Properties
     --------------------------------------------*/

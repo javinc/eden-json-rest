@@ -3,6 +3,8 @@
 require_once __DIR__.'/../vendor/autoload.php';
 
 use Eden\Core\Argument;
+
+use Modules\Auth;
 use Modules\Helper;
 
 /**
@@ -37,6 +39,11 @@ class App extends \Eden\Server\Index
 	 * @const int INSTANCE multiple or singleton
 	 */
 	const INSTANCE = 1;
+
+	/**
+	 * @const string uac key
+	 */
+	const USER_ACCESS_KEY = 'access';
 
     /* Public Properties
     --------------------------------------------*/
@@ -377,6 +384,10 @@ class App extends \Eden\Server\Index
 		$this->all('**', function($request, $response) {
 			// call Controllers
 			$action = $response->get('action');
+
+			// check uac
+			$this->checkAuth($action);
+
 			$data = $action::main($request, $response);
 
 			// check status code if error
@@ -396,6 +407,35 @@ class App extends \Eden\Server\Index
 		return $this;
 	}
 
+	public function checkAuth($obj) {
+		if(!isset($obj::$auth) || $obj::$auth === true) {
+			Auth::setUser(Auth::check());
+		}
+
+		// User access control settings
+		$settings = $this->config('settings');
+		if(Auth::getUser() && isset($settings['uac']) && $settings['uac']) {
+			if(property_exists($obj, 'permissions')) {
+				$this->checkPermission(
+					Auth::getUser(),
+					Helper::getRequestMethod(),
+					$obj::$permissions
+				);
+			}
+		}
+	}
+
+	public function checkPermission($user, $action, $list) {
+		if(!isset($list[$action])) {
+			return false;
+		}
+
+		if(!in_array($list[$action], $user[self::USER_ACCESS_KEY])) {
+			Auth::errorCode('ACTION_FORBIDDEN');
+		}
+
+		return true;
+	}
     /* Protected Methods
     --------------------------------------------*/
     /* Private Methods
