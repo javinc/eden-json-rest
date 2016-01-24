@@ -41,7 +41,7 @@ class Rest
         if(empty($resource) || empty($method)) {
             Helper::panic(
                 'REST_RESOURCE_REQUIRED',
-                Helper::$resource . '::' . __FUNCTION__ .
+                'Rest' . '::' . __FUNCTION__ .
                 '() resource & method are required, empty given');
 
             return;

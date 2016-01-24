@@ -3,6 +3,8 @@
 namespace Controllers;
 
 use Modules\Rest;
+use Modules\Helper;
+
 use Services\Test as T;
 
 class Test
@@ -17,16 +19,15 @@ class Test
     --------------------------------------------*/
     /* Public Methods
     --------------------------------------------*/
-    public function exec()
+    public static function main()
     {
+        return T::find();
         return Rest::resource(new T(), true);
     }
 
-    public static function process($request, $response)
+    public static function xmain($request, $response)
     {
-        $response->set('body', 'from Controllers Test');
-
-        // return Helper::error('NOT_FOUND', 'page not found');
+        return Helper::error('NOT_FOUND', 'page not found');
     }
 
     /* Protected Methods

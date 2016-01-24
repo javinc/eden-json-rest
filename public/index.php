@@ -6,6 +6,9 @@
 
 require __DIR__.'/../app/App.php';
 
+// NOTE display errors only for now
+error_reporting(E_ERROR);
+
 App::i()
 ->defaultPaths()
 ->defaultDatabases()

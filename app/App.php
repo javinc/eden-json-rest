@@ -3,6 +3,7 @@
 require_once __DIR__.'/../vendor/autoload.php';
 
 use Eden\Core\Argument;
+use Modules\Helper;
 
 /**
  * The starting point of every application call. If you are only
@@ -32,8 +33,18 @@ class App extends \Eden\Server\Index
 {
     /* Constants
     --------------------------------------------*/
+	/**
+	 * @const int INSTANCE multiple or singleton
+	 */
+	const INSTANCE = 1;
+
     /* Public Properties
     --------------------------------------------*/
+	/**
+	 * @var string|null $rootPath
+	 */
+	public $rootPath = null;
+
 	/**
 	 * @var string|null $defaultDatabase
 	 */
@@ -248,6 +259,9 @@ class App extends \Eden\Server\Index
 				//do nothing
 				return;
 			}
+
+			// hijack request to fix preflight
+			Helper::fixPreflight();
 
 			//determine the route namespace
 			$prefix = 'Controllers';

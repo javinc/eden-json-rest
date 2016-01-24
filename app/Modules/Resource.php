@@ -92,7 +92,7 @@ class Resource
 
     public static function db()
     {
-        return control()->database();
+        return app()->database();
     }
 
     public static function search()

@@ -16,11 +16,6 @@ class Index
     --------------------------------------------*/
     /* Public Methods
     --------------------------------------------*/
-    public function render()
-    {
-        $response->set('body', 'from Controllers Index');
-    }
-
     public static function main($request, $response)
     {
         return Helper::error('NOT_FOUND', 'page not found');
