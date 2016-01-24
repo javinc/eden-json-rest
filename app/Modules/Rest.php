@@ -37,8 +37,6 @@ class Rest
 
     public static function call($resource, $method)
     {
-        var_dump([$resource, $method]);die();
-
         // check empty resource || method
         if(empty($resource) || empty($method)) {
             Helper::panic(
