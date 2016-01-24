@@ -54,6 +54,7 @@ class Auth
 
         // validate and get id
         $payload = self::validate($token);
+
         if(empty($payload)) {
             self::errorCode('AUTH_INVALID_CREDENTIALS');
         }

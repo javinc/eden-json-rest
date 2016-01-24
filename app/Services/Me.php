@@ -32,8 +32,6 @@ class Me
             $userId = Auth::getUser()['id'];
         }
 
-        print_r(Auth::getUser());
-
         return User::get($userId);
     }
 
