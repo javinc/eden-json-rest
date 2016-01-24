@@ -20,14 +20,14 @@ class User
     public static $permissions = array(
         'GET' => Permission::USER_VIEW,
         'POST' => Permission::USER_CREATE,
-        'PATCH' => Permission::USER_UPDATE,
+        'PUT' => Permission::USER_UPDATE,
         'DELETE' => Permission::USER_REMOVE,
     );
 
     public function main()
     {
         // restrict the username not to be change
-        if(Helper::getRequestMethod() == 'PATCH') {
+        if(Helper::getRequestMethod() == 'PUT') {
             if(Helper::getJson('username')) {
                 return Helper::error('USERNAME_MUST_NOT_CHANGE',
                     'Username cannot be change');
