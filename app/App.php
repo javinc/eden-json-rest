@@ -410,7 +410,17 @@ class App extends \Eden\Server\Index
 		$this->all('**', function($request, $response) {
 				// call Controllers
 				$action = $response->get('action');
-				$action::process($request, $response);
+				$data = $action::main($request, $response);
+
+				// check status code if error
+				if(isset($data['error'])) {
+					http_response_code(400);
+				}
+
+				// default output json
+				$output = json_encode($data);
+
+				$response->set('body', $output);
 			});
 
 		return $this;

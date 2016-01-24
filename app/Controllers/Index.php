@@ -21,11 +21,9 @@ class Index
         $response->set('body', 'from Controllers Index');
     }
 
-    public static function process($request, $response)
+    public static function main($request, $response)
     {
-        // return Helper::error('NOT_FOUND', 'page not found');
-
-        $response->set('body', 'from Controllers Index');
+        return Helper::error('NOT_FOUND', 'page not found');
     }
 
     /* Protected Methods
