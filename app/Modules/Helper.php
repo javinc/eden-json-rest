@@ -201,10 +201,16 @@ class Helper
 
             // simplify stack trace
             foreach($rawStackTrace as $trace) {
-                $stackTrace[] = $trace['file'] . ':'
-                    . $trace['line'] . ' '
-                    . $trace['class'] . $trace['type']
-                    . $trace['function'] . '()';
+                $file = isset($trace['file']) ? $trace['file'] : '';
+                $type = isset($trace['type']) ? $trace['type'] : '';
+                $class = isset($trace['class']) ? $trace['class'] : '';
+                $function = isset($trace['function']) ? $trace['function'] : '';
+                $line = isset($trace['line']) ? $trace['line'] : '';
+
+                $stackTrace[] = $file . ':'
+                    . $line . ' '
+                    . $class . $type
+                    . $function . '()';
             }
         }
 
@@ -214,14 +220,14 @@ class Helper
         }
 
         // log error
-        Log::create(array(
-            'type' => $panic ? 'PANIC' : 'ERROR',
-            'name' => $name,
-            'description' => array(
-                'msg' => $msg,
-                'debug_stack' => $stackTrace,
-            )
-        ));
+        // Log::create(array(
+        //     'type' => $panic ? 'PANIC' : 'ERROR',
+        //     'name' => $name,
+        //     'description' => array(
+        //         'msg' => $msg,
+        //         'debug_stack' => $stackTrace,
+        //     )
+        // ));
 
         if($die) {
             die(json_encode($error));

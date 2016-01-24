@@ -23,9 +23,9 @@ class Index
 
     public static function process($request, $response)
     {
-        // $response->set('body', 'from Controllers Index');
+        Helper::panic('NOT_FOUND', 'page not found');
 
-        return Helper::error('NOT_FOUND', 'page not found');
+        $response->set('body', 'from Controllers Index');
     }
 
     /* Protected Methods
