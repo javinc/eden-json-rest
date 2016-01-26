@@ -1,5 +1,5 @@
 # Eden-Json-Rest
-is a RESTful JSON API built using [Openovate's Eden Framework V3](https://github.com/Openovate/Framework)
+is a RESTful JSON API built using [Openovate's Eden V4](https://github.com/eden-php)
 
 ### requirements
 - PHP 5.6+
