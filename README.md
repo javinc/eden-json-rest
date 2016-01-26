@@ -7,7 +7,7 @@ is a RESTful JSON API built using [Openovate's Eden Framework V3](https://github
 - composer
 
 ### setup
-- point your VirtualHost to `/repo/Api/public`
+- point your VirtualHost to `/public`
 - run `composer install`
 - run `mkdir upload && chmod 777 upload` for files
 
