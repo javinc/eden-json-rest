@@ -12,7 +12,7 @@ use Exception;
  * @category   utility
  * @author     javincX
  */
-class Csv extends \Eden\Core\Base
+class Csv
 {
     /* Constants
     -------------------------------*/
@@ -38,11 +38,6 @@ class Csv extends \Eden\Core\Base
     {
         // generate temp filepath
         $this->tempCsvPath = rtrim(sys_get_temp_dir(), DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR . self::getTempFile();
-    }
-
-    public static function i()
-    {
-        return self::getSingleton(__CLASS__);
     }
 
     /* Public Methods

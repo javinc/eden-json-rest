@@ -90,7 +90,7 @@ class File
     }
 
     public static function getPath() {
-        return control()->path(self::$filePath);
+        return app()->path(self::$filePath);
     }
 
     public static function upload($file)

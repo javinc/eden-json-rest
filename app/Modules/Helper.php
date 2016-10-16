@@ -32,10 +32,10 @@ class Helper
     public static function getJson($field = null, $panic = true)
     {
         if($input = (array) json_decode(file_get_contents('php://input'))) {
-            control()->registry()->set('input', $input);
+            app()->registry()->set('input', $input);
         }
 
-        $data = self::getData((array)control()->registry()['input'], $field);
+        $data = self::getData((array) app()->registry()->get('input'), $field);
 
         // check if invalid json
         if(empty($data) && $data !== null) {
@@ -58,7 +58,7 @@ class Helper
     public static function getParam($field = null)
     {
         return self::getData(
-            control()->registry()['get'],
+            self::getRequest('get'),
             $field);
     }
 
@@ -71,7 +71,7 @@ class Helper
     public static function getSegment($index = null)
     {
         return self::getData(
-            control()->registry()['request']['variables'],
+            self::getRequest('segment'),
             $index);
     }
 
@@ -82,7 +82,6 @@ class Helper
      */
     public static function getRequestMethod()
     {
-
         return self::getServer()['REQUEST_METHOD'];
     }
 
@@ -94,8 +93,23 @@ class Helper
     public static function getServer($index = null)
     {
         return self::getData(
-            control()->registry()['server'],
+            self::getRequest('server'),
             $index);
+    }
+
+    /*
+     * get $_FILES data
+     *
+     * @return array
+     */
+    public static function getRequest($index = null)
+    {
+        $data = app()->registry();
+        if($index == null) {
+            return $data->get('request');
+        }
+
+        return $data->get('request', $index);
     }
 
     /*
@@ -106,7 +120,7 @@ class Helper
     public static function getFile($field = null)
     {
         return self::getData(
-            control()->registry()['files'],
+            self::getRequest('files'),
             $field);
     }
 
@@ -118,7 +132,7 @@ class Helper
     public static function getSetting($index = null)
     {
         return self::getData(
-            control()->config('/settings'),
+            app()->config('/settings'),
             $index);
     }
 
@@ -149,8 +163,8 @@ class Helper
         header('Content-Type: application/json');
         // header('Access-Control-Allow-Origin: *');
         // header('Access-Control-Allow-Headers: Origin, Content-Type, Accept, '
-            // . 'Authorization, X-Requested-With, Application-Authorization');
-        header('Access-Control-Allow-Methods: GET, POST, PATCH, DELETE, OPTIONS');
+        // . 'Authorization, X-Requested-With, Application-Authorization');
+        header('Access-Control-Allow-Methods: GET, POST, PUT, DELETE, OPTIONS');
     }
 
     /*
@@ -201,10 +215,16 @@ class Helper
 
             // simplify stack trace
             foreach($rawStackTrace as $trace) {
-                $stackTrace[] = $trace['file'] . ':'
-                    . $trace['line'] . ' '
-                    . $trace['class'] . $trace['type']
-                    . $trace['function'] . '()';
+                $file = isset($trace['file']) ? $trace['file'] : '';
+                $type = isset($trace['type']) ? $trace['type'] : '';
+                $class = isset($trace['class']) ? $trace['class'] : '';
+                $function = isset($trace['function']) ? $trace['function'] : '';
+                $line = isset($trace['line']) ? $trace['line'] : '';
+
+                $stackTrace[] = $file . ':'
+                    . $line . ' '
+                    . $class . $type
+                    . $function . '()';
             }
         }
 
@@ -214,14 +234,14 @@ class Helper
         }
 
         // log error
-        Log::create(array(
-            'type' => $panic ? 'PANIC' : 'ERROR',
-            'name' => $name,
-            'description' => array(
-                'msg' => $msg,
-                'debug_stack' => $stackTrace,
-            )
-        ));
+        // Log::create(array(
+        //     'type' => $panic ? 'PANIC' : 'ERROR',
+        //     'name' => $name,
+        //     'description' => array(
+        //         'msg' => $msg,
+        //         'debug_stack' => $stackTrace,
+        //     )
+        // ));
 
         if($die) {
             die(json_encode($error));
@@ -256,7 +276,7 @@ class Helper
      */
     public static function debug($data = null, $die = false)
     {
-        control()->inspect($data);
+        app()->inspect($data);
 
         if($die) {
             die();

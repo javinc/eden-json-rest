@@ -1,23 +1,23 @@
 <?php //-->
 
-namespace Api\Page;
+namespace Controllers;
 
 use Modules\Helper;
 use Services\User\Login as L;
 
-class Login extends \Page
+class Login
 {
     /* Constants
     --------------------------------------------*/
     /* Public Properties
     --------------------------------------------*/
-    public $auth = false;
+    public static $auth = false;
 
     /* Protected Properties
     --------------------------------------------*/
     /* Public Methods
     --------------------------------------------*/
-    public function getVariables()
+    public function main()
     {
         // public access for post
         if(Helper::getRequestMethod() == 'POST') {

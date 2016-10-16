@@ -22,6 +22,7 @@ class Password
     const HASH_SEPERATOR = '.';
 
     const URL_PREFIX = 'password/reset';
+
     /* Public Properties
     --------------------------------------------*/
     /* Protected Properties
@@ -181,7 +182,6 @@ class Password
                 <p>You have requested for password reset</p>
                 <a href="' . $url . '">Please click this link to continue</a>
                 <br />
-                <p><em>Mashdrop.com</em></p>
             </body>
         </html>';
 

@@ -54,6 +54,7 @@ class Auth
 
         // validate and get id
         $payload = self::validate($token);
+
         if(empty($payload)) {
             self::errorCode('AUTH_INVALID_CREDENTIALS');
         }
@@ -71,7 +72,7 @@ class Auth
     {
         if(array_key_exists($code, self::$errors)) {
             // kill it!
-            Helper::error($code, self::$errors[$code], true);
+            Helper::panic($code, self::$errors[$code]);
         }
     }
 

@@ -1,25 +1,32 @@
 <?php //-->
 
-namespace Api\Page;
+namespace Controllers\File;
 
-use Modules\Rest;
-use Services\Test as T;
+use Modules\Helper;
+use Services\File;
 
-class Test extends \Page
+class Raw
 {
     /* Constants
     --------------------------------------------*/
     /* Public Properties
     --------------------------------------------*/
-    // public $auth = false;
+    public static $auth = false;
 
     /* Protected Properties
     --------------------------------------------*/
     /* Public Methods
     --------------------------------------------*/
-    public function getVariables()
+    public static function main()
     {
-        return Rest::resource(new T(), true);
+        $uuid = Helper::getSegment(0);
+
+        // retrieve file
+        if($data = File::getFile($uuid)) {
+            return $data;
+        }
+
+        die('file not found');
     }
 
     /* Protected Methods

@@ -25,7 +25,7 @@ class Rest
     protected static $methodsAvailable = array(
         'GET' => 'find',
         'POST' => 'create',
-        'PATCH' => 'update',
+        'PUT' => 'update',
         'DELETE' => 'remove');
 
     /* Public Methods
@@ -41,7 +41,7 @@ class Rest
         if(empty($resource) || empty($method)) {
             Helper::panic(
                 'REST_RESOURCE_REQUIRED',
-                Helper::$resource . '::' . __FUNCTION__ .
+                'Rest' . '::' . __FUNCTION__ .
                 '() resource & method are required, empty given');
 
             return;
@@ -53,6 +53,8 @@ class Rest
                 'REST_METHOD_NOT_AVAILABLE',
                 $method . ' method not available');
         }
+
+        // print_r([$resource, $method, self::$methodsAvailable[$method]]);die();
 
         // rest call
         return self::process($method, $resource, self::$methodsAvailable[$method]);
@@ -129,7 +131,7 @@ class Rest
         return $resource::$resourceMethod($payload);
     }
 
-    private static function patch($resource, $resourceMethod)
+    private static function put($resource, $resourceMethod)
     {
         // check if singles
         if($id = Helper::getSegment(0)) {

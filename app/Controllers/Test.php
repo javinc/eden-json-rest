@@ -1,24 +1,25 @@
 <?php //-->
 
-namespace Api\Page;
+namespace Controllers;
 
-use Modules\Helper;
+use Modules\Rest;
+use Services\Test as T;
 
-class Index extends \Page 
+class Test
 {
     /* Constants
     --------------------------------------------*/
     /* Public Properties
     --------------------------------------------*/
-    public $auth = false;
-    
+    // public static $auth = false;
+
     /* Protected Properties
     --------------------------------------------*/
     /* Public Methods
     --------------------------------------------*/
-    public function getVariables()
-    {   
-        return Helper::error('NOT_FOUND', 'page not found');
+    public static function main($request, $response)
+    {
+        return Rest::resource(new T(), true);
     }
 
     /* Protected Methods
